@@ -26,7 +26,7 @@ export default function Post(post: Update) {
   return (
     <Layout>
       <Head>
-        <title>{post.title}</title>
+        <title>{post.title} • Aha Labs</title>
       </Head>
       <article>
         <h1 className={utilStyles.headingXl}>{post.title}</h1>

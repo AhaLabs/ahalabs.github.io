@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/utils.module.css";
@@ -5,6 +6,10 @@ import styles from "../styles/utils.module.css";
 export default function Custom404() {
   return (
     <div className={styles.container}>
+      <Head>
+        <title>404 • Aha Labs</title>
+        <link rel="icon" href="/favicon.png" />
+      </Head>
       <header className={styles.header}>
         <Image
           priority

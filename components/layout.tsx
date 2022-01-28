@@ -11,7 +11,7 @@ export default function Layout({ children, home = false }) {
     <div className={styles.container}>
       <Head>
         <title>{title}</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
         <meta name="description" content={description} />
         <meta
           property="og:image"
