@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import styles from "./layout.module.css";
-import utilStyles from "../styles/utils.module.css";
+import styles from "../styles/utils.module.css";
 import Link from "next/link";
 
 export const title = "Aha Labs";
@@ -29,9 +28,9 @@ export default function Layout({ children, home = false }) {
               src="/images/logo.png"
               height={144}
               width={144}
-              alt={title}
+              alt=""
             />
-            <h1 className={utilStyles.heading2Xl}>{title}</h1>
+            <h1 className={styles.heading2Xl}>{title}</h1>
           </>
         ) : (
           <>
@@ -42,15 +41,13 @@ export default function Layout({ children, home = false }) {
                   src="/images/logo.png"
                   height={108}
                   width={108}
-                  alt={title}
+                  alt=""
                 />
               </a>
             </Link>
-            <h2
-              className={`${utilStyles.headingLg} ${utilStyles.colorInherit}`}
-            >
+            <h2 className={`${styles.headingLg} ${styles.colorInherit}`}>
               <Link href="/">
-                <a className={utilStyles.colorInherit}>{title}</a>
+                <a className={styles.colorInherit}>{title}</a>
               </Link>
             </h2>
           </>
