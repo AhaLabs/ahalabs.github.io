@@ -17,17 +17,15 @@ export type Post = FrontMatter & {
 const postsDirectory = path.join(process.cwd(), "posts");
 
 function checkFrontMatter(fileName: string, data: { [key: string]: any }) {
-  if (typeof data.title !== "string") {
-    throw new Error(
-      `Expected ${fileName} to specify "title" as a string in its frontmatter, got ${typeof data.title}`
-    );
-  }
-
-  if (typeof data.date !== "string") {
-    throw new Error(
-      `Expected ${fileName} to specify "date" as a string in its frontmatter, got ${typeof data.date}`
-    );
-  }
+  ["title", "date"].forEach((attr) => {
+    if (typeof data[attr] !== "string") {
+      throw new Error(
+        `Expected ${fileName} to specify "${attr}" as a string in its frontmatter, got ${typeof data[
+          attr
+        ]}`
+      );
+    }
+  });
 
   return data as FrontMatter;
 }
