@@ -3,9 +3,9 @@ import Link from "next/link";
 import Date from "../components/date";
 import Layout, { title, description } from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
-import { getSortedPostsData } from "../lib/posts";
+import { getUpdates } from "../lib/updates";
 
-export default function Home({ allPostsData }) {
+export default function Home({ updates }) {
   return (
     <Layout home>
       <Head>
@@ -25,11 +25,11 @@ export default function Home({ allPostsData }) {
         </p>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Blog</h2>
+        <h2 className={utilStyles.headingLg}>Updates</h2>
         <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }) => (
+          {updates.map(({ id, date, title }) => (
             <li className={utilStyles.listItem} key={id}>
-              <Link href={`/posts/${id}`}>
+              <Link href={`/updates/${date}`}>
                 <a>{title}</a>
               </Link>
               <br />
@@ -45,6 +45,6 @@ export default function Home({ allPostsData }) {
 }
 
 export async function getStaticProps() {
-  const allPostsData = getSortedPostsData();
-  return { props: { allPostsData } };
+  const updates = getUpdates();
+  return { props: { updates } };
 }

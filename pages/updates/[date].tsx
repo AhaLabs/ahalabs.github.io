@@ -1,18 +1,28 @@
 import Layout from "../../components/layout";
 import Date from "../../components/date";
-import { getAllPostIds, getPostData } from "../../lib/posts";
-import type { Post } from "../../lib/posts";
+import { getUpdates, getUpdate } from "../../lib/updates";
+import type { Update } from "../../lib/updates";
 import Head from "next/head";
 import utilStyles from "../../styles/utils.module.css";
 
-export async function getStaticProps({ params }) {
-  const post = await getPostData(params.id);
+export async function getStaticPaths() {
+  const posts = getUpdates();
   return {
-    props: { post },
+    paths: posts.map(({ date }) => ({
+      params: { date },
+    })),
+    fallback: false,
   };
 }
 
-export default function Post({ post }: { post: Post }) {
+export async function getStaticProps({ params }) {
+  const post = await getUpdate(params.date);
+  return {
+    props: post,
+  };
+}
+
+export default function Post(post: Update) {
   return (
     <Layout>
       <Head>
@@ -27,12 +37,4 @@ export default function Post({ post }: { post: Post }) {
       <div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
     </Layout>
   );
-}
-
-export async function getStaticPaths() {
-  const paths = getAllPostIds();
-  return {
-    paths,
-    fallback: false,
-  };
 }
