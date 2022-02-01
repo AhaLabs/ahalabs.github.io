@@ -23,7 +23,7 @@ export default function Layout({ children, home = false }) {
         {home ? (
           <>
             <img
-              src="/images/logo.png"
+              src={require("../public/images/logo.png")}
               height={144}
               width={144}
               alt=""
@@ -35,7 +35,7 @@ export default function Layout({ children, home = false }) {
             <Link href="/">
               <a>
                 <img
-                  src="/images/logo.png"
+                  src={require("../public/images/logo.png")}
                   height={108}
                   width={108}
                   alt=""
