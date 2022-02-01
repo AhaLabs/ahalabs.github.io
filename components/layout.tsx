@@ -1,4 +1,6 @@
 import Head from "next/head";
+import Img from "react-optimized-image";
+import Logo from "../public/images/logo.png";
 import styles from "../styles/utils.module.css";
 import Link from "next/link";
 
@@ -22,24 +24,14 @@ export default function Layout({ children, home = false }) {
       <header className={styles.header}>
         {home ? (
           <>
-            <img
-              src="/images/logo.png"
-              height={144}
-              width={144}
-              alt=""
-            />
+            <Img src={Logo} height={144} width={144} alt="" />
             <h1 className={styles.heading2Xl}>{title}</h1>
           </>
         ) : (
           <>
             <Link href="/">
               <a>
-                <img
-                  src="/images/logo.png"
-                  height={108}
-                  width={108}
-                  alt=""
-                />
+                <Img src={Logo} height={108} width={108} alt="" />
               </a>
             </Link>
             <h2 className={`${styles.headingLg} ${styles.colorInherit}`}>
