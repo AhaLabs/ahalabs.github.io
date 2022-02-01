@@ -32,7 +32,12 @@ function checkFrontMatter(fileName: string, data: { [key: string]: any }) {
 
 export function getUpdates() {
   // Get file names under /updates
-  const fileNames = fs.readdirSync(updatesDirectory);
+  let fileNames: string[];
+  try {
+    fileNames = fs.readdirSync(updatesDirectory);
+  } catch {
+    fileNames = [];
+  }
   const allUpdatesData = fileNames.map((fileName) => {
     // Remove ".md" from file name to get id
     const id = fileName.replace(/\.md$/, "");
