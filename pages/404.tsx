@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/utils.module.css";
 
@@ -11,13 +10,7 @@ export default function Custom404() {
         <link rel="icon" href="/favicon.png" />
       </Head>
       <header className={styles.header}>
-        <Image
-          priority
-          src="/images/404.png"
-          height={144}
-          width={144}
-          alt="nuh uh"
-        />
+        <img src="/images/404.png" height={144} width={144} alt="nuh uh" />
         <h1 className={styles.heading2Xl}>404</h1>
         <p>Page not found. Not sure what happened here. Sorry.</p>
         <div className={styles.backToHome}>

@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/utils.module.css";
 import Link from "next/link";
 
@@ -23,8 +22,7 @@ export default function Layout({ children, home = false }) {
       <header className={styles.header}>
         {home ? (
           <>
-            <Image
-              priority
+            <img
               src="/images/logo.png"
               height={144}
               width={144}
@@ -36,8 +34,7 @@ export default function Layout({ children, home = false }) {
           <>
             <Link href="/">
               <a>
-                <Image
-                  priority
+                <img
                   src="/images/logo.png"
                   height={108}
                   width={108}
