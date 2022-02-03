@@ -4,7 +4,7 @@ date: "2022-02-03"
 author: "@chadoh"
 ---
 
-Build fast with a [powerful frontend template](https://github.com/AhaLabs/cra-template-near) that integrates with NEAR:
+Build fast with a [powerful frontend template] that integrates with NEAR:
 
     npx create-react-app --template @ahalabs
 
@@ -53,5 +53,6 @@ Is create-react-app the best choice? Unclear. I've [been](https://github.com/Aha
 
 Please try out this template and be loud with all feedback. Make pull-requests, make [issues](https://github.com/AhaLabs/cra-template-near/issues), or just `@` me [on Twitter][@chadoh].
 
+[powerful frontend template]: https://github.com/AhaLabs/cra-template-near
 [ncd]: https://www.near.university/courses/near-certified-developer
 [@chadoh]: https://twitter.com/chadoh
