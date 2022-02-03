@@ -12,16 +12,16 @@ export default function Layout({
   description = siteDescription,
   author = "",
 }) {
+  const combinedTitle = `${title}${
+    title === siteTitle ? "" : ` • ${siteTitle}`
+  }`;
   return (
     <div className={styles.container}>
       <Head>
-        <title>
-          {title}
-          {title === siteTitle ? "" : ` • ${siteTitle}`}
-        </title>
+        <title>{combinedTitle}</title>
         <link rel="icon" href="/favicon.png" />
         <meta name="description" content={description} />
-        <meta name="og:title" content={title} />
+        <meta name="og:title" content={combinedTitle} />
         <meta name="og:description" content={description} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ahalabs.dev" />
@@ -31,7 +31,7 @@ export default function Layout({
         />
         <meta name="twitter:card" content="summary_large_image" />
         {author && <meta name="twitter:creator" content={author} />}
-        <meta name="twitter:title" content={title} />
+        <meta name="twitter:title" content={combinedTitle} />
       </Head>
       <header className={styles.header}>
         {title === siteTitle ? (
