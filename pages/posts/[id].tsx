@@ -1,28 +1,28 @@
 import Layout from "../../components/layout";
 import Date from "../../components/date";
-import { getUpdates, getUpdate } from "../../lib/updates";
-import type { Update } from "../../lib/updates";
+import { getPosts, getPost } from "../../lib/posts";
+import type { Post } from "../../lib/posts";
 import Head from "next/head";
 import utilStyles from "../../styles/utils.module.css";
 
 export async function getStaticPaths() {
-  const posts = getUpdates();
+  const posts = getPosts();
   return {
-    paths: posts.map(({ date }) => ({
-      params: { date },
+    paths: posts.map(({ id }) => ({
+      params: { id },
     })),
     fallback: false,
   };
 }
 
 export async function getStaticProps({ params }) {
-  const post = await getUpdate(params.date);
+  const post = await getPost(params.id);
   return {
     props: post,
   };
 }
 
-export default function Post(post: Update) {
+export default function Post(post: Post) {
   return (
     <Layout>
       <Head>
