@@ -4,6 +4,7 @@ import { getPosts, getPost } from "../../lib/posts";
 import type { Post } from "../../lib/posts";
 import Head from "next/head";
 import utilStyles from "../../styles/utils.module.css";
+import Markdown from "react-markdown";
 
 export async function getStaticPaths() {
   const posts = getPosts();
@@ -34,7 +35,7 @@ export default function Post(post: Post) {
           <Date dateString={post.date} />
         </div>
       </article>
-      <div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+      <Markdown children={post.markdown} />
     </Layout>
   );
 }

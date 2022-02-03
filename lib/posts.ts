@@ -1,8 +1,6 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { remark } from "remark";
-import html from "remark-html";
 
 interface FrontMatter {
   title: string;
@@ -11,7 +9,7 @@ interface FrontMatter {
 
 export type Post = FrontMatter & {
   id: string;
-  contentHtml: string;
+  markdown: string;
 };
 
 const postsDirectory = path.join(process.cwd(), "posts");
@@ -77,16 +75,10 @@ export async function getPost(id: string): Promise<Post> {
   const matterResult = matter(fileContents);
   const frontMatter = checkFrontMatter(fileName, matterResult.data);
 
-  // Use remark to convert markdown into HTML string
-  const processedContent = await remark()
-    .use(html)
-    .process(matterResult.content);
-  const contentHtml = processedContent.toString();
-
   // Combine the data with the id
   return {
     id,
     ...frontMatter,
-    contentHtml,
+    markdown: matterResult.content,
   };
 }
