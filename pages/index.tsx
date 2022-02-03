@@ -1,19 +1,15 @@
-import Head from "next/head";
 import Link from "next/link";
 import Date from "../components/date";
-import Layout, { title, description } from "../components/layout";
+import Layout, { siteDescription } from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
 import { getPosts } from "../lib/posts";
 
 export default function Home({ posts }) {
   return (
-    <Layout home>
-      <Head>
-        <title>{title}</title>
-      </Head>
+    <Layout>
       <section className={utilStyles.headingMd}>
         <p>
-          {description}. Visit us on{" "}
+          {siteDescription}. Visit us on{" "}
           <a
             href="https://github.com/AhaLabs"
             target="_blank"

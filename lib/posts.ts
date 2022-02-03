@@ -5,6 +5,7 @@ import matter from "gray-matter";
 interface FrontMatter {
   title: string;
   date: string;
+  author: string;
 }
 
 export type Post = FrontMatter & {
@@ -15,7 +16,7 @@ export type Post = FrontMatter & {
 const postsDirectory = path.join(process.cwd(), "posts");
 
 function checkFrontMatter(fileName: string, data: { [key: string]: any }) {
-  ["title", "date"].forEach((attr) => {
+  ["title", "date", "author"].forEach((attr) => {
     if (typeof data[attr] !== "string") {
       throw new Error(
         `Expected ${fileName} to specify "${attr}" as a string in its frontmatter, got ${typeof data[

@@ -25,13 +25,10 @@ export async function getStaticProps({ params }) {
 
 export default function Post(post: Post) {
   return (
-    <Layout>
-      <Head>
-        <title>{post.title} • Aha Labs</title>
-      </Head>
+    <Layout title={post.title} description={post.markdown} author={post.author}>
       <article>
         <h1 className={utilStyles.headingXl}>{post.title}</h1>
-        <div className={utilStyles.lighterText}>
+        <div className={utilStyles.lightText}>
           <Date dateString={post.date} />
         </div>
       </article>

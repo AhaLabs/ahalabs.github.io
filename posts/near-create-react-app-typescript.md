@@ -1,6 +1,7 @@
 ---
 title: "NEAR + create-react-app + TypeScript"
 date: "2022-02-03"
+author: "@chadoh"
 ---
 
 Build fast with a [powerful frontend template](https://github.com/AhaLabs/cra-template-near) that integrates with NEAR:
