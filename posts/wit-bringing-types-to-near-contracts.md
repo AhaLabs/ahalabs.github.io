@@ -10,7 +10,7 @@ Under the hood, NEAR uses WebAssembly (Wasm) to run smart contracts. While this 
 great, it has some pain points. For normal Wasm binaries, functions exported can
 only have float and integer types. So more complex types like strings have to be
 passed via a pointer, `pass_string(len: u32, ptr: u32)`. This makes it hard to
-tell from the function signature that a string is being passed, it could be
+tell from the function signature that a string is being passed; it could be
 any binary blob.
 
 For NEAR Wasm binaries this problem is made worse because all export functions have the same
