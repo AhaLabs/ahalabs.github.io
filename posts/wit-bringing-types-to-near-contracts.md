@@ -183,60 +183,60 @@ Which would look something like
     "type": "object"
   },
  "SetMessage": {
-      "additionalProperties": false,
-      "contractMethod": "change",
-      "description": "A change call to set the message",
-      "properties": {
-        "args": {
-          "additionalProperties": false,
-          "properties": {
-            "message": {
-              "$ref": "#/definitions/Message"
-            }
-          },
-          "required": [
-            "message"
-          ],
-          "type": "object"
+    "additionalProperties": false,
+    "contractMethod": "change",
+    "description": "A change call to set the message",
+    "properties": {
+      "args": {
+        "additionalProperties": false,
+        "properties": {
+          "message": {
+            "$ref": "#/definitions/Message"
+          }
         },
-        "options": {
-          "additionalProperties": false,
-          "properties": {
-            "attachedDeposit": {
-              "$ref": "#/definitions/Balance",
-              "default": "0",
-              "description": "Units in yoctoNear"
-            },
-            "gas": {
-              "default": "30000000000000",
-              "description": "Units in gas",
-              "pattern": "[0-9]+",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        }
+        "required": [
+          "message"
+        ],
+        "type": "object"
       },
-      "required": [
-        "args",
-        "options"
-      ],
-      "type": "object"
+      "options": {
+        "additionalProperties": false,
+        "properties": {
+          "attachedDeposit": {
+            "$ref": "#/definitions/Balance",
+            "default": "0",
+            "description": "Units in yoctoNear"
+          },
+          "gas": {
+            "default": "30000000000000",
+            "description": "Units in gas",
+            "pattern": "[0-9]+",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    },
+    "required": [
+      "args",
+      "options"
+    ],
+    "type": "object"
     },
   "Message": {
-      "additionalProperties": false,
-      "description": "A message that contains some text",
-      "properties": {
-        "text": {
-          "description": "Inner string value",
-          "type": "string"
-        }
-      },
-      "required": [
-        "text"
-      ],
-      "type": "object"
+    "additionalProperties": false,
+    "description": "A message that contains some text",
+    "properties": {
+      "text": {
+        "description": "Inner string value",
+        "type": "string"
+      }
     },
+    "required": [
+      "text"
+    ],
+    "type": "object"
+  },
 }
 ```
 
@@ -277,20 +277,20 @@ export interface Message {
 ```json
 {
   "Message": {
-      "additionalProperties": false,
-      "description": "A message that contains some text",
-      "properties": {
-        "text": {
-          "description": "Inner string value",
-          "pattern": "^TEXT:",
-          "type": "string"
-        }
-      },
-      "required": [
-        "text"
-      ],
-      "type": "object"
+    "additionalProperties": false,
+    "description": "A message that contains some text",
+    "properties": {
+      "text": {
+        "description": "Inner string value",
+        "pattern": "^TEXT:",
+        "type": "string"
+      }
     },
+    "required": [
+      "text"
+    ],
+    "type": "object"
+  },
 }
 ```
 
@@ -300,3 +300,7 @@ This is showcased in the TenK repo's admin panel: [https://tenk-dao.github.io/te
 .args.account_id should NOT be shorter than 2 characters
 .args.account_id should match pattern "^(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$"
 ```
+
+## Future Plans
+
+Our future plans include: adding rust code generation for testing and for making cross contract calls more user friendly; adding borsh support for more efficient serialization than json; adding custom transformations for schema fields, allowing passing values like "10 N" instead of "10000000000000000000000000"; making the form dynamic for targeting different contracts; and lastly creating a wit registry for deployed contracts.
