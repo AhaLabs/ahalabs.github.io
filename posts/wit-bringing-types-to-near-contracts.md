@@ -261,8 +261,7 @@ pub struct Message {
 }
 ```
 
-```typescript
-
+```ts
 /**
 * A message that contains some text
 */
@@ -273,12 +272,10 @@ export interface Message {
   */
   text: string;
 }
-
 ```
 
 ```json
 {
-///
   "Message": {
       "additionalProperties": false,
       "description": "A message that contains some text",
@@ -294,11 +291,10 @@ export interface Message {
       ],
       "type": "object"
     },
-///
 }
 ```
 
-This is showcased in the TenK repo's admin panel: [https://tenk-dao.github.io/tenk](https://tenk-dao.github.io/tenk/#/mint_rate_limit.tenk.testnet/NftTokensForOwner). Try entering "." for the `account_id` and hit submit or check `live validation` and you'll get the following error
+This is showcased in the TenK repo's admin panel: [https://tenk-dao.github.io/tenk](https://tenk-dao.github.io/tenk/#/mint_rate_limit.tenk.testnet/NftTokensForOwner). Try entering "." for the `account_id` and hit submit or check `live validation` and you'll get the following error:
 
 ``` js
 .args.account_id should NOT be shorter than 2 characters
