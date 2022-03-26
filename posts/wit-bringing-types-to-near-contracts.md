@@ -28,10 +28,10 @@ with no other information.
 Until this is complete the `wit-bindgen` project created a [`.wit`](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md) format that can be used to generate the needed source "`adapters`" to handle passing the complex types.
 
 For example, in JavaScript strings are encoded as `UTF-16`[note], but `UTF-8` in Rust. So
-passing the binary blob of the string from a Rust Wasm binary is not a simple copy/pasted.
+passing the binary blob of the string from a Rust Wasm binary is not a simple copy/paste.
 
 For our use case we need `remote adapters`.  Whereas `wit-bindgen` expects to pass values
-via a normal function call, we are serializing values and then deserializing them.
+via a normal function call, we are serializing values on one side of an RPC call and then deserializing them on the other.
 
 ## `witme` a CLI tool for generating to and from `.wit`
 
@@ -74,7 +74,7 @@ impl Contract {
 
 ```
 
-The view method `get_message` returns a `Message` struct. `#[witgen]` is a Rust macro that generates a corresponding [`wit` record](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md#item-record-bag-of-named-fields). See the [witgen repo](https://github.com/bnjjj/witgen)
+The view method `get_message` returns a `Message` struct. `#[witgen]` is a Rust macro that generates a corresponding [`wit` record](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md#item-record-bag-of-named-fields). See the [witgen repo](https://github.com/bnjjj/witgen) to learn more about generating `.wit` files from existing code.
 
 Furthermore the `#[near_bindgen]` macro has been updated to generate [function types in `wit`](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md#item-function).
 
@@ -137,13 +137,11 @@ export class Contract {
   */
   get_message(args = {}, options?: ViewFunctionOptions): Promise<Message> {}
 }
-
 ```
 
 This means the contract's interface is now available to use with `near-api-js` to interact with the contract.
 
-```typescript
-
+```ts
 import {Contract, Message} from "message/contract";
 import {Account} from "near-api-js";
 
@@ -151,11 +149,9 @@ async function getMessage(currentAccount: Account): Promise<Message> {
   let contract = new Contract(currentAccount, "contract.testnet");
   return contract.get_message();
 }
-
-
 ```
 
-Since the original comments in the rust code are preserved you can also get hover over docs in your IDE, or generate the docs see [TenK's docs](https://tenk-dao.github.io/tenk/docs/).
+Since the original comments in the rust code are preserved you can also get hover over docs in your IDE, or generate a documentation website (see [TenK's docs](https://tenk-dao.github.io/tenk/docs/) for an example).
 
 ## JSON Schema
 
