@@ -1,0 +1,844 @@
+<!DOCTYPE html><html lang="en"><head><meta name="viewport" content="width=device-width"/><meta charSet="utf-8"/><title>`wit`: Bringing types to NEAR smart contracts • Aha Labs</title><link rel="icon" href="/favicon.png"/><meta name="description" content="
+# NEAR and WebAssembly
+
+Under the hood, NEAR uses WebAssembly (Wasm) to run smart contracts. While this is
+great, it has some pain points. For normal Wasm binaries, functions exported can
+only have float and integer types. So more complex types like strings have to be
+passed via a pointer, `pass_string(len: u32, ptr: u32)`. This makes it hard to
+tell from the function signature that a string is being passed; it could be
+any binary blob.
+
+For NEAR Wasm binaries this problem is made worse because all export functions have the same
+type signature, `foo()`, that is they take no arguments and return nothing. The reason
+for this is because the arguments are serialized in JSON, so the function first
+asks the host for a binary blob and then deserializes it.
+
+So if you can download a contract&#x27;s binary and inspect it, you&#x27;ll only have the function names
+with no other information.
+
+## Introducing the `wit` format
+
+[WebAssembly Interface Types](https://hacks.mozilla.org/2019/08/webassembly-interface-types/) seeks to solve the task of passing of more complex types at a low level.
+
+Until this is complete the `wit-bindgen` project created a [`.wit`](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md) format that can be used to generate the needed source &quot;`adapters`&quot; to handle passing the complex types.
+
+For example, in JavaScript strings are encoded as `UTF-16`[note], but `UTF-8` in Rust. So
+passing the binary blob of the string from a Rust Wasm binary is not a simple copy/paste.
+
+For our use case we need `remote adapters`.  Whereas `wit-bindgen` expects to pass values
+via a normal function call, we are serializing values on one side of an RPC call and then deserializing them on the other.
+
+## `witme` a CLI tool for generating to and from `.wit`
+
+So after that introduction let&#x27;s walk through a real example. First `witme` is a Rust binary that can be installed with `cargo`:
+
+```bash
+cargo install witme
+```
+
+Assume that you have a Rust smart contract:
+
+```rust
+use near_sdk::{witgen, near_bindgen}
+
+/// A message that contains some text
+#[witgen]
+pub struct Message {
+  /// Inner string value
+  text: String,
+}
+
+//...
+pub struct Contract {
+  message: Message
+}
+
+#[near_bindgen]
+impl Contract {
+  
+  /// A change call to set the message
+  pub fn set_message(&amp;mut self, message: Message) {
+    self.mesage = message;
+  }
+
+  /// A view call to get the current message
+  pub fn get_message(self) -&gt; Message {
+    self.message
+  }
+}
+
+```
+
+The view method `get_message` returns a `Message` struct. `#[witgen]` is a Rust macro that generates a corresponding [`wit` record](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md#item-record-bag-of-named-fields). See the [witgen repo](https://github.com/bnjjj/witgen) to learn more about generating `.wit` files from existing code.
+
+Furthermore the `#[near_bindgen]` macro has been updated to generate [function types in `wit`](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md#item-function).
+
+Next you can use `witme` to generate a `.wit` file for the contract.
+
+```bash
+witme near wit
+```
+
+generates `index.wit`
+
+```wit
+///  A message that contains some text
+record message {
+    ///  Inner string value
+    text: string
+}
+
+///  A change call to set the message
+///  change
+set-message: function(message: message)
+
+///  A view call to get the current message
+get-message: function() -&gt; message
+
+```
+
+This `wit` file now describes the Contract&#x27;s interface in a language agnostic way. This means we can now generate source code for a different language.  For example, TypeScript:
+
+```bash
+witme near ts
+```
+
+By default this command looks for an `index.wit` and puts the generated TS in it&#x27;s own `./ts` folder.
+
+```typescript
+/**
+* A message that contains some text
+*/
+export interface Message {
+  /**
+  * Inner string value
+  */
+  text: string;
+}
+
+export class Contract {
+  /** Account calling the contract and the contractId to call */
+  constructor(public account: Account, public readonly contractId: string){}
+  
+  /**
+  * A change call to set the message
+  */
+  async set_message(args: {
+    message: Message;
+  }, options?: ChangeMethodOptions): Promise&lt;void&gt; {}
+
+  /**
+  * A view call to get the current message
+  */
+  get_message(args = {}, options?: ViewFunctionOptions): Promise&lt;Message&gt; {}
+}
+```
+
+This means the contract&#x27;s interface is now available to use with `near-api-js` to interact with the contract.
+
+```ts
+import {Contract, Message} from &quot;message/contract&quot;;
+import {Account} from &quot;near-api-js&quot;;
+
+async function getMessage(currentAccount: Account): Promise&lt;Message&gt; {
+  let contract = new Contract(currentAccount, &quot;contract.testnet&quot;);
+  return contract.get_message();
+}
+```
+
+Since the original comments in the rust code are preserved you can also get hover over docs in your IDE, or generate a documentation website (see [TenK&#x27;s docs](https://tenk-dao.github.io/tenk/docs/) for an example).
+
+## JSON Schema
+
+Taking this a step further we can generate a [json-schema](https://json-schema.org/), basically a JSON object that defines the constraints of the data to allow a JSON object to be validated.
+
+```bash
+witme near json
+```
+
+Currently this is supported by using a [ts-json-schema-generator](https://github.com/vega/ts-json-schema-generator). Though this too could be generated directly from the `.wit`.  This command defaults to find a `./ts/index.ts`, which it uses to generate a `index.schema.json`.
+
+Which would look something like
+
+```json
+{
+  &quot;GetMessage&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;contractMethod&quot;: &quot;view&quot;,
+    &quot;description&quot;: &quot;A view call to get the current message&quot;,
+    &quot;properties&quot;: {
+      &quot;args&quot;: {
+        &quot;additionalProperties&quot;: false,
+        &quot;type&quot;: &quot;object&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;args&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+  },
+ &quot;SetMessage&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;contractMethod&quot;: &quot;change&quot;,
+    &quot;description&quot;: &quot;A change call to set the message&quot;,
+    &quot;properties&quot;: {
+      &quot;args&quot;: {
+        &quot;additionalProperties&quot;: false,
+        &quot;properties&quot;: {
+          &quot;message&quot;: {
+            &quot;$ref&quot;: &quot;#/definitions/Message&quot;
+          }
+        },
+        &quot;required&quot;: [
+          &quot;message&quot;
+        ],
+        &quot;type&quot;: &quot;object&quot;
+      },
+      &quot;options&quot;: {
+        &quot;additionalProperties&quot;: false,
+        &quot;properties&quot;: {
+          &quot;attachedDeposit&quot;: {
+            &quot;$ref&quot;: &quot;#/definitions/Balance&quot;,
+            &quot;default&quot;: &quot;0&quot;,
+            &quot;description&quot;: &quot;Units in yoctoNear&quot;
+          },
+          &quot;gas&quot;: {
+            &quot;default&quot;: &quot;30000000000000&quot;,
+            &quot;description&quot;: &quot;Units in gas&quot;,
+            &quot;pattern&quot;: &quot;[0-9]+&quot;,
+            &quot;type&quot;: &quot;string&quot;
+          }
+        },
+        &quot;type&quot;: &quot;object&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;args&quot;,
+      &quot;options&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+    },
+  &quot;Message&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;description&quot;: &quot;A message that contains some text&quot;,
+    &quot;properties&quot;: {
+      &quot;text&quot;: {
+        &quot;description&quot;: &quot;Inner string value&quot;,
+        &quot;type&quot;: &quot;string&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;text&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+  },
+}
+```
+
+First we can see `GetMessage` is a `view` function and requires an `args` object that has no properties. Next `SetMessage` requires an `args` object with one field &quot;`message`&quot;, the type of which is a reference to the `Message` type defined in the schema. Since `SetMessage` is a `change` function, an `options` field is also required for how much gas and deposit to attached to the transaction.
+
+Whereas the Typescript would provide compile time checks that the types used in the contract call are valid, this allows the arguments passed to a contract method at runtime to be validated, thus preventing errors before they reach a NEAR node.
+
+
+### Forms for free
+
+Now that we have a schema and know all of the input types, a React form can be autogenerated to validate and interact with the contract.  Not only are the types validated, but extra annotations can be used to add additional constraints.
+
+For example, if the text of every message had to start with &quot;`TEXT:`&quot; a regular expression can be added to the comments.
+
+```rust
+/// A message that contains some text
+#[witgen]
+pub struct Message {
+  /// Inner string value
+  /// @pattern ^TEXT:
+  text: String,
+}
+```
+
+```ts
+/**
+* A message that contains some text
+*/
+export interface Message {
+  /**
+  * Inner string value
+  * @pattern ^TEXT:
+  */
+  text: string;
+}
+```
+
+```json
+{
+  &quot;Message&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;description&quot;: &quot;A message that contains some text&quot;,
+    &quot;properties&quot;: {
+      &quot;text&quot;: {
+        &quot;description&quot;: &quot;Inner string value&quot;,
+        &quot;pattern&quot;: &quot;^TEXT:&quot;,
+        &quot;type&quot;: &quot;string&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;text&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+  },
+}
+```
+
+This is showcased in the TenK repo&#x27;s admin panel: [https://tenk-dao.github.io/tenk](https://tenk-dao.github.io/tenk/#/mint_rate_limit.tenk.testnet/NftTokensForOwner). Try entering &quot;.&quot; for the `account_id` and hit submit or check `live validation` and you&#x27;ll get the following error:
+
+``` js
+.args.account_id should NOT be shorter than 2 characters
+.args.account_id should match pattern &quot;^(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$&quot;
+```
+
+## Future Plans
+
+Our future plans include: adding rust code generation for testing and for making cross contract calls more user friendly; adding borsh support for more efficient serialization than json; adding custom transformations for schema fields, allowing passing values like &quot;10 N&quot; instead of &quot;10000000000000000000000000&quot;; making the form dynamic for targeting different contracts; and lastly creating a wit registry for deployed contracts.
+"/><meta name="og:title" content="`wit`: Bringing types to NEAR smart contracts • Aha Labs"/><meta name="og:description" content="
+# NEAR and WebAssembly
+
+Under the hood, NEAR uses WebAssembly (Wasm) to run smart contracts. While this is
+great, it has some pain points. For normal Wasm binaries, functions exported can
+only have float and integer types. So more complex types like strings have to be
+passed via a pointer, `pass_string(len: u32, ptr: u32)`. This makes it hard to
+tell from the function signature that a string is being passed; it could be
+any binary blob.
+
+For NEAR Wasm binaries this problem is made worse because all export functions have the same
+type signature, `foo()`, that is they take no arguments and return nothing. The reason
+for this is because the arguments are serialized in JSON, so the function first
+asks the host for a binary blob and then deserializes it.
+
+So if you can download a contract&#x27;s binary and inspect it, you&#x27;ll only have the function names
+with no other information.
+
+## Introducing the `wit` format
+
+[WebAssembly Interface Types](https://hacks.mozilla.org/2019/08/webassembly-interface-types/) seeks to solve the task of passing of more complex types at a low level.
+
+Until this is complete the `wit-bindgen` project created a [`.wit`](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md) format that can be used to generate the needed source &quot;`adapters`&quot; to handle passing the complex types.
+
+For example, in JavaScript strings are encoded as `UTF-16`[note], but `UTF-8` in Rust. So
+passing the binary blob of the string from a Rust Wasm binary is not a simple copy/paste.
+
+For our use case we need `remote adapters`.  Whereas `wit-bindgen` expects to pass values
+via a normal function call, we are serializing values on one side of an RPC call and then deserializing them on the other.
+
+## `witme` a CLI tool for generating to and from `.wit`
+
+So after that introduction let&#x27;s walk through a real example. First `witme` is a Rust binary that can be installed with `cargo`:
+
+```bash
+cargo install witme
+```
+
+Assume that you have a Rust smart contract:
+
+```rust
+use near_sdk::{witgen, near_bindgen}
+
+/// A message that contains some text
+#[witgen]
+pub struct Message {
+  /// Inner string value
+  text: String,
+}
+
+//...
+pub struct Contract {
+  message: Message
+}
+
+#[near_bindgen]
+impl Contract {
+  
+  /// A change call to set the message
+  pub fn set_message(&amp;mut self, message: Message) {
+    self.mesage = message;
+  }
+
+  /// A view call to get the current message
+  pub fn get_message(self) -&gt; Message {
+    self.message
+  }
+}
+
+```
+
+The view method `get_message` returns a `Message` struct. `#[witgen]` is a Rust macro that generates a corresponding [`wit` record](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md#item-record-bag-of-named-fields). See the [witgen repo](https://github.com/bnjjj/witgen) to learn more about generating `.wit` files from existing code.
+
+Furthermore the `#[near_bindgen]` macro has been updated to generate [function types in `wit`](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md#item-function).
+
+Next you can use `witme` to generate a `.wit` file for the contract.
+
+```bash
+witme near wit
+```
+
+generates `index.wit`
+
+```wit
+///  A message that contains some text
+record message {
+    ///  Inner string value
+    text: string
+}
+
+///  A change call to set the message
+///  change
+set-message: function(message: message)
+
+///  A view call to get the current message
+get-message: function() -&gt; message
+
+```
+
+This `wit` file now describes the Contract&#x27;s interface in a language agnostic way. This means we can now generate source code for a different language.  For example, TypeScript:
+
+```bash
+witme near ts
+```
+
+By default this command looks for an `index.wit` and puts the generated TS in it&#x27;s own `./ts` folder.
+
+```typescript
+/**
+* A message that contains some text
+*/
+export interface Message {
+  /**
+  * Inner string value
+  */
+  text: string;
+}
+
+export class Contract {
+  /** Account calling the contract and the contractId to call */
+  constructor(public account: Account, public readonly contractId: string){}
+  
+  /**
+  * A change call to set the message
+  */
+  async set_message(args: {
+    message: Message;
+  }, options?: ChangeMethodOptions): Promise&lt;void&gt; {}
+
+  /**
+  * A view call to get the current message
+  */
+  get_message(args = {}, options?: ViewFunctionOptions): Promise&lt;Message&gt; {}
+}
+```
+
+This means the contract&#x27;s interface is now available to use with `near-api-js` to interact with the contract.
+
+```ts
+import {Contract, Message} from &quot;message/contract&quot;;
+import {Account} from &quot;near-api-js&quot;;
+
+async function getMessage(currentAccount: Account): Promise&lt;Message&gt; {
+  let contract = new Contract(currentAccount, &quot;contract.testnet&quot;);
+  return contract.get_message();
+}
+```
+
+Since the original comments in the rust code are preserved you can also get hover over docs in your IDE, or generate a documentation website (see [TenK&#x27;s docs](https://tenk-dao.github.io/tenk/docs/) for an example).
+
+## JSON Schema
+
+Taking this a step further we can generate a [json-schema](https://json-schema.org/), basically a JSON object that defines the constraints of the data to allow a JSON object to be validated.
+
+```bash
+witme near json
+```
+
+Currently this is supported by using a [ts-json-schema-generator](https://github.com/vega/ts-json-schema-generator). Though this too could be generated directly from the `.wit`.  This command defaults to find a `./ts/index.ts`, which it uses to generate a `index.schema.json`.
+
+Which would look something like
+
+```json
+{
+  &quot;GetMessage&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;contractMethod&quot;: &quot;view&quot;,
+    &quot;description&quot;: &quot;A view call to get the current message&quot;,
+    &quot;properties&quot;: {
+      &quot;args&quot;: {
+        &quot;additionalProperties&quot;: false,
+        &quot;type&quot;: &quot;object&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;args&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+  },
+ &quot;SetMessage&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;contractMethod&quot;: &quot;change&quot;,
+    &quot;description&quot;: &quot;A change call to set the message&quot;,
+    &quot;properties&quot;: {
+      &quot;args&quot;: {
+        &quot;additionalProperties&quot;: false,
+        &quot;properties&quot;: {
+          &quot;message&quot;: {
+            &quot;$ref&quot;: &quot;#/definitions/Message&quot;
+          }
+        },
+        &quot;required&quot;: [
+          &quot;message&quot;
+        ],
+        &quot;type&quot;: &quot;object&quot;
+      },
+      &quot;options&quot;: {
+        &quot;additionalProperties&quot;: false,
+        &quot;properties&quot;: {
+          &quot;attachedDeposit&quot;: {
+            &quot;$ref&quot;: &quot;#/definitions/Balance&quot;,
+            &quot;default&quot;: &quot;0&quot;,
+            &quot;description&quot;: &quot;Units in yoctoNear&quot;
+          },
+          &quot;gas&quot;: {
+            &quot;default&quot;: &quot;30000000000000&quot;,
+            &quot;description&quot;: &quot;Units in gas&quot;,
+            &quot;pattern&quot;: &quot;[0-9]+&quot;,
+            &quot;type&quot;: &quot;string&quot;
+          }
+        },
+        &quot;type&quot;: &quot;object&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;args&quot;,
+      &quot;options&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+    },
+  &quot;Message&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;description&quot;: &quot;A message that contains some text&quot;,
+    &quot;properties&quot;: {
+      &quot;text&quot;: {
+        &quot;description&quot;: &quot;Inner string value&quot;,
+        &quot;type&quot;: &quot;string&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;text&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+  },
+}
+```
+
+First we can see `GetMessage` is a `view` function and requires an `args` object that has no properties. Next `SetMessage` requires an `args` object with one field &quot;`message`&quot;, the type of which is a reference to the `Message` type defined in the schema. Since `SetMessage` is a `change` function, an `options` field is also required for how much gas and deposit to attached to the transaction.
+
+Whereas the Typescript would provide compile time checks that the types used in the contract call are valid, this allows the arguments passed to a contract method at runtime to be validated, thus preventing errors before they reach a NEAR node.
+
+
+### Forms for free
+
+Now that we have a schema and know all of the input types, a React form can be autogenerated to validate and interact with the contract.  Not only are the types validated, but extra annotations can be used to add additional constraints.
+
+For example, if the text of every message had to start with &quot;`TEXT:`&quot; a regular expression can be added to the comments.
+
+```rust
+/// A message that contains some text
+#[witgen]
+pub struct Message {
+  /// Inner string value
+  /// @pattern ^TEXT:
+  text: String,
+}
+```
+
+```ts
+/**
+* A message that contains some text
+*/
+export interface Message {
+  /**
+  * Inner string value
+  * @pattern ^TEXT:
+  */
+  text: string;
+}
+```
+
+```json
+{
+  &quot;Message&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;description&quot;: &quot;A message that contains some text&quot;,
+    &quot;properties&quot;: {
+      &quot;text&quot;: {
+        &quot;description&quot;: &quot;Inner string value&quot;,
+        &quot;pattern&quot;: &quot;^TEXT:&quot;,
+        &quot;type&quot;: &quot;string&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;text&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+  },
+}
+```
+
+This is showcased in the TenK repo&#x27;s admin panel: [https://tenk-dao.github.io/tenk](https://tenk-dao.github.io/tenk/#/mint_rate_limit.tenk.testnet/NftTokensForOwner). Try entering &quot;.&quot; for the `account_id` and hit submit or check `live validation` and you&#x27;ll get the following error:
+
+``` js
+.args.account_id should NOT be shorter than 2 characters
+.args.account_id should match pattern &quot;^(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$&quot;
+```
+
+## Future Plans
+
+Our future plans include: adding rust code generation for testing and for making cross contract calls more user friendly; adding borsh support for more efficient serialization than json; adding custom transformations for schema fields, allowing passing values like &quot;10 N&quot; instead of &quot;10000000000000000000000000&quot;; making the form dynamic for targeting different contracts; and lastly creating a wit registry for deployed contracts.
+"/><meta property="og:type" content="website"/><meta property="og:url" content="https://ahalabs.dev"/><meta property="og:image" content="https://ahalabs.dev/images/logo.png"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:creator" content="@willemneal"/><meta name="twitter:title" content="`wit`: Bringing types to NEAR smart contracts • Aha Labs"/><meta name="next-head-count" content="13"/><link rel="preload" href="/_next/static/css/7f89b98bc554da98.css" as="style"/><link rel="stylesheet" href="/_next/static/css/7f89b98bc554da98.css" data-n-g=""/><link rel="preload" href="/_next/static/css/fb95bfb4821a5f3c.css" as="style"/><link rel="stylesheet" href="/_next/static/css/fb95bfb4821a5f3c.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-5cd94c89d3acac5f.js"></script><script src="/_next/static/chunks/webpack-69bfa6990bb9e155.js" defer=""></script><script src="/_next/static/chunks/framework-91d7f78b5b4003c8.js" defer=""></script><script src="/_next/static/chunks/main-bd817fa5a106f441.js" defer=""></script><script src="/_next/static/chunks/pages/_app-ae657964cf53a525.js" defer=""></script><script src="/_next/static/chunks/395-5e58849a680d2558.js" defer=""></script><script src="/_next/static/chunks/346-6ecca89ec3900524.js" defer=""></script><script src="/_next/static/chunks/pages/posts/%5Bid%5D-66584fb9ee1e089c.js" defer=""></script><script src="/_next/static/AjlYqGsoNeueQnI2I1msr/_buildManifest.js" defer=""></script><script src="/_next/static/AjlYqGsoNeueQnI2I1msr/_ssgManifest.js" defer=""></script><script src="/_next/static/AjlYqGsoNeueQnI2I1msr/_middlewareManifest.js" defer=""></script></head><body><div id="__next" data-reactroot=""><div class="utils_container__BOIwL"><header class="utils_header__zqXjr"><a href="/"><img src="/_next/static/images/logo-4d732e7258b538c3dc3d67a5d05ea060.png" height="108" width="108" alt=""/></a><h2 class="utils_headingLg__5535D utils_colorInherit__mSH_x"><a class="utils_colorInherit__mSH_x" href="/">Aha Labs</a></h2></header><main><article><h1 class="utils_headingXl__u25Y2">`wit`: Bringing types to NEAR smart contracts</h1><div class="utils_lightText__eUzGY"><time dateTime="2022-02-03">February 3, 2022</time></div></article><h1>NEAR and WebAssembly</h1>
+<p>Under the hood, NEAR uses WebAssembly (Wasm) to run smart contracts. While this is
+great, it has some pain points. For normal Wasm binaries, functions exported can
+only have float and integer types. So more complex types like strings have to be
+passed via a pointer, <code>pass_string(len: u32, ptr: u32)</code>. This makes it hard to
+tell from the function signature that a string is being passed; it could be
+any binary blob.</p>
+<p>For NEAR Wasm binaries this problem is made worse because all export functions have the same
+type signature, <code>foo()</code>, that is they take no arguments and return nothing. The reason
+for this is because the arguments are serialized in JSON, so the function first
+asks the host for a binary blob and then deserializes it.</p>
+<p>So if you can download a contract&#x27;s binary and inspect it, you&#x27;ll only have the function names
+with no other information.</p>
+<h2>Introducing the <code>wit</code> format</h2>
+<p><a href="https://hacks.mozilla.org/2019/08/webassembly-interface-types/">WebAssembly Interface Types</a> seeks to solve the task of passing of more complex types at a low level.</p>
+<p>Until this is complete the <code>wit-bindgen</code> project created a <a href="https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md"><code>.wit</code></a> format that can be used to generate the needed source &quot;<code>adapters</code>&quot; to handle passing the complex types.</p>
+<p>For example, in JavaScript strings are encoded as <code>UTF-16</code>[note], but <code>UTF-8</code> in Rust. So
+passing the binary blob of the string from a Rust Wasm binary is not a simple copy/paste.</p>
+<p>For our use case we need <code>remote adapters</code>.  Whereas <code>wit-bindgen</code> expects to pass values
+via a normal function call, we are serializing values on one side of an RPC call and then deserializing them on the other.</p>
+<h2><code>witme</code> a CLI tool for generating to and from <code>.wit</code></h2>
+<p>So after that introduction let&#x27;s walk through a real example. First <code>witme</code> is a Rust binary that can be installed with <code>cargo</code>:</p>
+<pre><code class="language-bash">cargo install witme
+</code></pre>
+<p>Assume that you have a Rust smart contract:</p>
+<pre><code class="language-rust">use near_sdk::{witgen, near_bindgen}
+
+/// A message that contains some text
+#[witgen]
+pub struct Message {
+  /// Inner string value
+  text: String,
+}
+
+//...
+pub struct Contract {
+  message: Message
+}
+
+#[near_bindgen]
+impl Contract {
+  
+  /// A change call to set the message
+  pub fn set_message(&amp;mut self, message: Message) {
+    self.mesage = message;
+  }
+
+  /// A view call to get the current message
+  pub fn get_message(self) -&gt; Message {
+    self.message
+  }
+}
+
+</code></pre>
+<p>The view method <code>get_message</code> returns a <code>Message</code> struct. <code>#[witgen]</code> is a Rust macro that generates a corresponding <a href="https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md#item-record-bag-of-named-fields"><code>wit</code> record</a>. See the <a href="https://github.com/bnjjj/witgen">witgen repo</a> to learn more about generating <code>.wit</code> files from existing code.</p>
+<p>Furthermore the <code>#[near_bindgen]</code> macro has been updated to generate <a href="https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md#item-function">function types in <code>wit</code></a>.</p>
+<p>Next you can use <code>witme</code> to generate a <code>.wit</code> file for the contract.</p>
+<pre><code class="language-bash">witme near wit
+</code></pre>
+<p>generates <code>index.wit</code></p>
+<pre><code class="language-wit">///  A message that contains some text
+record message {
+    ///  Inner string value
+    text: string
+}
+
+///  A change call to set the message
+///  change
+set-message: function(message: message)
+
+///  A view call to get the current message
+get-message: function() -&gt; message
+
+</code></pre>
+<p>This <code>wit</code> file now describes the Contract&#x27;s interface in a language agnostic way. This means we can now generate source code for a different language.  For example, TypeScript:</p>
+<pre><code class="language-bash">witme near ts
+</code></pre>
+<p>By default this command looks for an <code>index.wit</code> and puts the generated TS in it&#x27;s own <code>./ts</code> folder.</p>
+<pre><code class="language-typescript">/**
+* A message that contains some text
+*/
+export interface Message {
+  /**
+  * Inner string value
+  */
+  text: string;
+}
+
+export class Contract {
+  /** Account calling the contract and the contractId to call */
+  constructor(public account: Account, public readonly contractId: string){}
+  
+  /**
+  * A change call to set the message
+  */
+  async set_message(args: {
+    message: Message;
+  }, options?: ChangeMethodOptions): Promise&lt;void&gt; {}
+
+  /**
+  * A view call to get the current message
+  */
+  get_message(args = {}, options?: ViewFunctionOptions): Promise&lt;Message&gt; {}
+}
+</code></pre>
+<p>This means the contract&#x27;s interface is now available to use with <code>near-api-js</code> to interact with the contract.</p>
+<pre><code class="language-ts">import {Contract, Message} from &quot;message/contract&quot;;
+import {Account} from &quot;near-api-js&quot;;
+
+async function getMessage(currentAccount: Account): Promise&lt;Message&gt; {
+  let contract = new Contract(currentAccount, &quot;contract.testnet&quot;);
+  return contract.get_message();
+}
+</code></pre>
+<p>Since the original comments in the rust code are preserved you can also get hover over docs in your IDE, or generate a documentation website (see <a href="https://tenk-dao.github.io/tenk/docs/">TenK&#x27;s docs</a> for an example).</p>
+<h2>JSON Schema</h2>
+<p>Taking this a step further we can generate a <a href="https://json-schema.org/">json-schema</a>, basically a JSON object that defines the constraints of the data to allow a JSON object to be validated.</p>
+<pre><code class="language-bash">witme near json
+</code></pre>
+<p>Currently this is supported by using a <a href="https://github.com/vega/ts-json-schema-generator">ts-json-schema-generator</a>. Though this too could be generated directly from the <code>.wit</code>.  This command defaults to find a <code>./ts/index.ts</code>, which it uses to generate a <code>index.schema.json</code>.</p>
+<p>Which would look something like</p>
+<pre><code class="language-json">{
+  &quot;GetMessage&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;contractMethod&quot;: &quot;view&quot;,
+    &quot;description&quot;: &quot;A view call to get the current message&quot;,
+    &quot;properties&quot;: {
+      &quot;args&quot;: {
+        &quot;additionalProperties&quot;: false,
+        &quot;type&quot;: &quot;object&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;args&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+  },
+ &quot;SetMessage&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;contractMethod&quot;: &quot;change&quot;,
+    &quot;description&quot;: &quot;A change call to set the message&quot;,
+    &quot;properties&quot;: {
+      &quot;args&quot;: {
+        &quot;additionalProperties&quot;: false,
+        &quot;properties&quot;: {
+          &quot;message&quot;: {
+            &quot;$ref&quot;: &quot;#/definitions/Message&quot;
+          }
+        },
+        &quot;required&quot;: [
+          &quot;message&quot;
+        ],
+        &quot;type&quot;: &quot;object&quot;
+      },
+      &quot;options&quot;: {
+        &quot;additionalProperties&quot;: false,
+        &quot;properties&quot;: {
+          &quot;attachedDeposit&quot;: {
+            &quot;$ref&quot;: &quot;#/definitions/Balance&quot;,
+            &quot;default&quot;: &quot;0&quot;,
+            &quot;description&quot;: &quot;Units in yoctoNear&quot;
+          },
+          &quot;gas&quot;: {
+            &quot;default&quot;: &quot;30000000000000&quot;,
+            &quot;description&quot;: &quot;Units in gas&quot;,
+            &quot;pattern&quot;: &quot;[0-9]+&quot;,
+            &quot;type&quot;: &quot;string&quot;
+          }
+        },
+        &quot;type&quot;: &quot;object&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;args&quot;,
+      &quot;options&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+    },
+  &quot;Message&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;description&quot;: &quot;A message that contains some text&quot;,
+    &quot;properties&quot;: {
+      &quot;text&quot;: {
+        &quot;description&quot;: &quot;Inner string value&quot;,
+        &quot;type&quot;: &quot;string&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;text&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+  },
+}
+</code></pre>
+<p>First we can see <code>GetMessage</code> is a <code>view</code> function and requires an <code>args</code> object that has no properties. Next <code>SetMessage</code> requires an <code>args</code> object with one field &quot;<code>message</code>&quot;, the type of which is a reference to the <code>Message</code> type defined in the schema. Since <code>SetMessage</code> is a <code>change</code> function, an <code>options</code> field is also required for how much gas and deposit to attached to the transaction.</p>
+<p>Whereas the Typescript would provide compile time checks that the types used in the contract call are valid, this allows the arguments passed to a contract method at runtime to be validated, thus preventing errors before they reach a NEAR node.</p>
+<h3>Forms for free</h3>
+<p>Now that we have a schema and know all of the input types, a React form can be autogenerated to validate and interact with the contract.  Not only are the types validated, but extra annotations can be used to add additional constraints.</p>
+<p>For example, if the text of every message had to start with &quot;<code>TEXT:</code>&quot; a regular expression can be added to the comments.</p>
+<pre><code class="language-rust">/// A message that contains some text
+#[witgen]
+pub struct Message {
+  /// Inner string value
+  /// @pattern ^TEXT:
+  text: String,
+}
+</code></pre>
+<pre><code class="language-ts">/**
+* A message that contains some text
+*/
+export interface Message {
+  /**
+  * Inner string value
+  * @pattern ^TEXT:
+  */
+  text: string;
+}
+</code></pre>
+<pre><code class="language-json">{
+  &quot;Message&quot;: {
+    &quot;additionalProperties&quot;: false,
+    &quot;description&quot;: &quot;A message that contains some text&quot;,
+    &quot;properties&quot;: {
+      &quot;text&quot;: {
+        &quot;description&quot;: &quot;Inner string value&quot;,
+        &quot;pattern&quot;: &quot;^TEXT:&quot;,
+        &quot;type&quot;: &quot;string&quot;
+      }
+    },
+    &quot;required&quot;: [
+      &quot;text&quot;
+    ],
+    &quot;type&quot;: &quot;object&quot;
+  },
+}
+</code></pre>
+<p>This is showcased in the TenK repo&#x27;s admin panel: <a href="https://tenk-dao.github.io/tenk/#/mint_rate_limit.tenk.testnet/NftTokensForOwner">https://tenk-dao.github.io/tenk</a>. Try entering &quot;.&quot; for the <code>account_id</code> and hit submit or check <code>live validation</code> and you&#x27;ll get the following error:</p>
+<pre><code class="language-js">.args.account_id should NOT be shorter than 2 characters
+.args.account_id should match pattern &quot;^(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$&quot;
+</code></pre>
+<h2>Future Plans</h2>
+<p>Our future plans include: adding rust code generation for testing and for making cross contract calls more user friendly; adding borsh support for more efficient serialization than json; adding custom transformations for schema fields, allowing passing values like &quot;10 N&quot; instead of &quot;10000000000000000000000000&quot;; making the form dynamic for targeting different contracts; and lastly creating a wit registry for deployed contracts.</p></main><div class="utils_backToHome__qdSRN"><a href="/">← Back to home</a></div></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"id":"wit-bringing-types-to-near-contracts","title":"`wit`: Bringing types to NEAR smart contracts","date":"2022-02-03","author":"@willemneal","markdown":"\n# NEAR and WebAssembly\n\nUnder the hood, NEAR uses WebAssembly (Wasm) to run smart contracts. While this is\ngreat, it has some pain points. For normal Wasm binaries, functions exported can\nonly have float and integer types. So more complex types like strings have to be\npassed via a pointer, `pass_string(len: u32, ptr: u32)`. This makes it hard to\ntell from the function signature that a string is being passed; it could be\nany binary blob.\n\nFor NEAR Wasm binaries this problem is made worse because all export functions have the same\ntype signature, `foo()`, that is they take no arguments and return nothing. The reason\nfor this is because the arguments are serialized in JSON, so the function first\nasks the host for a binary blob and then deserializes it.\n\nSo if you can download a contract's binary and inspect it, you'll only have the function names\nwith no other information.\n\n## Introducing the `wit` format\n\n[WebAssembly Interface Types](https://hacks.mozilla.org/2019/08/webassembly-interface-types/) seeks to solve the task of passing of more complex types at a low level.\n\nUntil this is complete the `wit-bindgen` project created a [`.wit`](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md) format that can be used to generate the needed source \"`adapters`\" to handle passing the complex types.\n\nFor example, in JavaScript strings are encoded as `UTF-16`[note], but `UTF-8` in Rust. So\npassing the binary blob of the string from a Rust Wasm binary is not a simple copy/paste.\n\nFor our use case we need `remote adapters`.  Whereas `wit-bindgen` expects to pass values\nvia a normal function call, we are serializing values on one side of an RPC call and then deserializing them on the other.\n\n## `witme` a CLI tool for generating to and from `.wit`\n\nSo after that introduction let's walk through a real example. First `witme` is a Rust binary that can be installed with `cargo`:\n\n```bash\ncargo install witme\n```\n\nAssume that you have a Rust smart contract:\n\n```rust\nuse near_sdk::{witgen, near_bindgen}\n\n/// A message that contains some text\n#[witgen]\npub struct Message {\n  /// Inner string value\n  text: String,\n}\n\n//...\npub struct Contract {\n  message: Message\n}\n\n#[near_bindgen]\nimpl Contract {\n  \n  /// A change call to set the message\n  pub fn set_message(\u0026mut self, message: Message) {\n    self.mesage = message;\n  }\n\n  /// A view call to get the current message\n  pub fn get_message(self) -\u003e Message {\n    self.message\n  }\n}\n\n```\n\nThe view method `get_message` returns a `Message` struct. `#[witgen]` is a Rust macro that generates a corresponding [`wit` record](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md#item-record-bag-of-named-fields). See the [witgen repo](https://github.com/bnjjj/witgen) to learn more about generating `.wit` files from existing code.\n\nFurthermore the `#[near_bindgen]` macro has been updated to generate [function types in `wit`](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md#item-function).\n\nNext you can use `witme` to generate a `.wit` file for the contract.\n\n```bash\nwitme near wit\n```\n\ngenerates `index.wit`\n\n```wit\n///  A message that contains some text\nrecord message {\n    ///  Inner string value\n    text: string\n}\n\n///  A change call to set the message\n///  change\nset-message: function(message: message)\n\n///  A view call to get the current message\nget-message: function() -\u003e message\n\n```\n\nThis `wit` file now describes the Contract's interface in a language agnostic way. This means we can now generate source code for a different language.  For example, TypeScript:\n\n```bash\nwitme near ts\n```\n\nBy default this command looks for an `index.wit` and puts the generated TS in it's own `./ts` folder.\n\n```typescript\n/**\n* A message that contains some text\n*/\nexport interface Message {\n  /**\n  * Inner string value\n  */\n  text: string;\n}\n\nexport class Contract {\n  /** Account calling the contract and the contractId to call */\n  constructor(public account: Account, public readonly contractId: string){}\n  \n  /**\n  * A change call to set the message\n  */\n  async set_message(args: {\n    message: Message;\n  }, options?: ChangeMethodOptions): Promise\u003cvoid\u003e {}\n\n  /**\n  * A view call to get the current message\n  */\n  get_message(args = {}, options?: ViewFunctionOptions): Promise\u003cMessage\u003e {}\n}\n```\n\nThis means the contract's interface is now available to use with `near-api-js` to interact with the contract.\n\n```ts\nimport {Contract, Message} from \"message/contract\";\nimport {Account} from \"near-api-js\";\n\nasync function getMessage(currentAccount: Account): Promise\u003cMessage\u003e {\n  let contract = new Contract(currentAccount, \"contract.testnet\");\n  return contract.get_message();\n}\n```\n\nSince the original comments in the rust code are preserved you can also get hover over docs in your IDE, or generate a documentation website (see [TenK's docs](https://tenk-dao.github.io/tenk/docs/) for an example).\n\n## JSON Schema\n\nTaking this a step further we can generate a [json-schema](https://json-schema.org/), basically a JSON object that defines the constraints of the data to allow a JSON object to be validated.\n\n```bash\nwitme near json\n```\n\nCurrently this is supported by using a [ts-json-schema-generator](https://github.com/vega/ts-json-schema-generator). Though this too could be generated directly from the `.wit`.  This command defaults to find a `./ts/index.ts`, which it uses to generate a `index.schema.json`.\n\nWhich would look something like\n\n```json\n{\n  \"GetMessage\": {\n    \"additionalProperties\": false,\n    \"contractMethod\": \"view\",\n    \"description\": \"A view call to get the current message\",\n    \"properties\": {\n      \"args\": {\n        \"additionalProperties\": false,\n        \"type\": \"object\"\n      }\n    },\n    \"required\": [\n      \"args\"\n    ],\n    \"type\": \"object\"\n  },\n \"SetMessage\": {\n    \"additionalProperties\": false,\n    \"contractMethod\": \"change\",\n    \"description\": \"A change call to set the message\",\n    \"properties\": {\n      \"args\": {\n        \"additionalProperties\": false,\n        \"properties\": {\n          \"message\": {\n            \"$ref\": \"#/definitions/Message\"\n          }\n        },\n        \"required\": [\n          \"message\"\n        ],\n        \"type\": \"object\"\n      },\n      \"options\": {\n        \"additionalProperties\": false,\n        \"properties\": {\n          \"attachedDeposit\": {\n            \"$ref\": \"#/definitions/Balance\",\n            \"default\": \"0\",\n            \"description\": \"Units in yoctoNear\"\n          },\n          \"gas\": {\n            \"default\": \"30000000000000\",\n            \"description\": \"Units in gas\",\n            \"pattern\": \"[0-9]+\",\n            \"type\": \"string\"\n          }\n        },\n        \"type\": \"object\"\n      }\n    },\n    \"required\": [\n      \"args\",\n      \"options\"\n    ],\n    \"type\": \"object\"\n    },\n  \"Message\": {\n    \"additionalProperties\": false,\n    \"description\": \"A message that contains some text\",\n    \"properties\": {\n      \"text\": {\n        \"description\": \"Inner string value\",\n        \"type\": \"string\"\n      }\n    },\n    \"required\": [\n      \"text\"\n    ],\n    \"type\": \"object\"\n  },\n}\n```\n\nFirst we can see `GetMessage` is a `view` function and requires an `args` object that has no properties. Next `SetMessage` requires an `args` object with one field \"`message`\", the type of which is a reference to the `Message` type defined in the schema. Since `SetMessage` is a `change` function, an `options` field is also required for how much gas and deposit to attached to the transaction.\n\nWhereas the Typescript would provide compile time checks that the types used in the contract call are valid, this allows the arguments passed to a contract method at runtime to be validated, thus preventing errors before they reach a NEAR node.\n\n\n### Forms for free\n\nNow that we have a schema and know all of the input types, a React form can be autogenerated to validate and interact with the contract.  Not only are the types validated, but extra annotations can be used to add additional constraints.\n\nFor example, if the text of every message had to start with \"`TEXT:`\" a regular expression can be added to the comments.\n\n```rust\n/// A message that contains some text\n#[witgen]\npub struct Message {\n  /// Inner string value\n  /// @pattern ^TEXT:\n  text: String,\n}\n```\n\n```ts\n/**\n* A message that contains some text\n*/\nexport interface Message {\n  /**\n  * Inner string value\n  * @pattern ^TEXT:\n  */\n  text: string;\n}\n```\n\n```json\n{\n  \"Message\": {\n    \"additionalProperties\": false,\n    \"description\": \"A message that contains some text\",\n    \"properties\": {\n      \"text\": {\n        \"description\": \"Inner string value\",\n        \"pattern\": \"^TEXT:\",\n        \"type\": \"string\"\n      }\n    },\n    \"required\": [\n      \"text\"\n    ],\n    \"type\": \"object\"\n  },\n}\n```\n\nThis is showcased in the TenK repo's admin panel: [https://tenk-dao.github.io/tenk](https://tenk-dao.github.io/tenk/#/mint_rate_limit.tenk.testnet/NftTokensForOwner). Try entering \".\" for the `account_id` and hit submit or check `live validation` and you'll get the following error:\n\n``` js\n.args.account_id should NOT be shorter than 2 characters\n.args.account_id should match pattern \"^(([a-z\\d]+[-_])*[a-z\\d]+\\.)*([a-z\\d]+[-_])*[a-z\\d]+$\"\n```\n\n## Future Plans\n\nOur future plans include: adding rust code generation for testing and for making cross contract calls more user friendly; adding borsh support for more efficient serialization than json; adding custom transformations for schema fields, allowing passing values like \"10 N\" instead of \"10000000000000000000000000\"; making the form dynamic for targeting different contracts; and lastly creating a wit registry for deployed contracts.\n"},"__N_SSG":true},"page":"/posts/[id]","query":{"id":"wit-bringing-types-to-near-contracts"},"buildId":"AjlYqGsoNeueQnI2I1msr","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
