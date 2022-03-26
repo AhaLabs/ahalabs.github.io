@@ -15,7 +15,7 @@ any binary blob.
 
 For NEAR Wasm binaries this problem is made worse because all export functions have the same
 type signature, `foo()`, that is they take no arguments and return nothing. The reason
-for this is because the arguments are serialized in JSON[note], so the function first
+for this is because the arguments are serialized in JSON, so the function first
 asks the host for a binary blob and then deserializes it.
 
 So if you can download a contract's binary and inspect it, you'll only have the function names
@@ -27,7 +27,7 @@ with no other information.
 
 Until this is complete the `wit-bindgen` project created a [`.wit`](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md) format that can be used to generate the needed source "`adapters`" to handle passing the complex types.
 
-For example, in JavaScript strings are encoded as `UTF-16`[note], but is `UTF-8` in Rust. So
+For example, in JavaScript strings are encoded as `UTF-16`[note], but `UTF-8` in Rust. So
 passing the binary blob of the string from a Rust Wasm binary is not a simple copy/pasted.
 
 For our use case we need `remote adapters`.  Whereas `wit-bindgen` expects to pass values
