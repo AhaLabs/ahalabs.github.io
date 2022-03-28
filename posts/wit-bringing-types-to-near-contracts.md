@@ -1,6 +1,6 @@
 ---
 title: "`wit`: Bringing types to NEAR smart contracts"
-date: "2022-02-03"
+date: "2022-03-25"
 author: "@willemneal"
 ---
 
@@ -60,7 +60,7 @@ pub struct Contract {
 
 #[near_bindgen]
 impl Contract {
-  
+
   /// A change call to set the message
   pub fn set_message(&mut self, message: Message) {
     self.mesage = message;
@@ -124,7 +124,7 @@ export interface Message {
 export class Contract {
   /** Account calling the contract and the contractId to call */
   constructor(public account: Account, public readonly contractId: string){}
-  
+
   /**
   * A change call to set the message
   */
