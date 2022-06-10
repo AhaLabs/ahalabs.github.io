@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Date from "../components/date";
-import Layout, { siteDescription } from "../components/layout";
+import Layout from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
 import { getPosts } from "../lib/posts";
 
@@ -9,15 +9,25 @@ export default function Home({ posts }) {
     <Layout>
       <section className={utilStyles.headingMd}>
         <p>
-          {siteDescription}. Visit us on{" "}
+          Makers of{" "}
+          <a
+            href="https://github.com/raendev/admin"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            RAEN
+          </a>.
+        </p>
+        <p>Aha Moments for NEAR, blockchain, and open source.</p>
+        <p>
+          Visit us on{" "}
           <a
             href="https://github.com/AhaLabs"
             target="_blank"
             rel="noopener noreferrer"
           >
             GitHub
-          </a>
-          .
+          </a>.
         </p>
       </section>
       {posts.length > 0 && (

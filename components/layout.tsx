@@ -2,9 +2,10 @@ import Head from "next/head";
 import styles from "../styles/utils.module.css";
 import Link from "next/link";
 
-export const siteTitle = "Aha Labs";
-export const siteDescription =
-  "Aha moments for NEAR, blockchain, & open source";
+const siteTitle = "Aha Labs";
+
+const siteDescription =
+  "Makers of RAEN. Aha moments for NEAR, blockchain, & open source.";
 
 export default function Layout({
   children,
