@@ -6,12 +6,14 @@
   --primary: rgb(231, 59, 147); /* green */
   --secondary: #AAD055; /* lilac */
   --tertiary: #A463B0; /* pink */
+  --shadow: rgba(0, 0, 0, .1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-  --bg: var(--black);
-  --fg: var(--white);
+    --bg: var(--black);
+    --fg: var(--white);
+    --shadow: rgba(255, 255, 255, .1);
   }
 }
 
@@ -36,12 +38,12 @@ body {
 a {
   color: var(--primary);
   text-decoration: none;
+  border-bottom: 1px solid var(--shadow);
 }
 
 a:focus,
 a:hover {
   color: var(--secondary);
-  text-decoration: underline;
 }
 
 a:active {
