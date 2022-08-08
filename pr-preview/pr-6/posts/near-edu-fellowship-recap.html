@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="en"><head><meta name="viewport" content="width=device-width"/><meta charSet="utf-8"/><title>Our time as NEAR Education Fellows: Reflections, Retrospective, Accomplishments, What&#x27;s Next • Aha Labs</title><link rel="icon" href="/favicon.png"/><meta name="description" content="
+Aha Labs joined the NEAR Education Fellowship program in January 2022. This program has changed structure; our time with it ended in May. Some highlights:
+
+## Product launches
+
+Collaborated with TENK [to](https://github.com/TENK-DAO/world-of-the-abyss) [launch](https://github.com/TENK-DAO/nearnymphs) [many](https://github.com/TENK-DAO/monkegodz) [NFT](https://github.com/TENK-DAO/shintosociety) [projects](https://github.com/TENK-DAO/monkedemonz) [in](https://github.com/TENK-DAO/beer-punks) [the](https://github.com/TENK-DAO/im-question-mark) [NEAR](https://github.com/TENK-DAO/neartrees) [ecosystem](https://github.com/TENK-DAO/friendlyseacreatures).
+
+## Turn-key solutions
+
+Created [contract](https://github.com/tenk-dao/tenk) and [frontend](https://github.com/tenk-dao/frontend-starter) templates that powered [many](https://paras.id/collection/asac.near) [NFT](https://paras.id/collection/secretskelliessociety.near) [launches](https://paras.id/collection/tayc-nft.near) [outside](https://paras.id/collection/mara-smartcontract.near) [of](https://paras.id/collection/rocketbois.neartopia.near) TENK partnerships (here we&#x27;ve linked to merely the first five found among the past-7-days-top-sellers on [Paras](https://paras.id)).
+
+## Powering NEAR Education
+
+Reviewed hundreds of applications to the [NEAR Certified Developer](https://www.near.university/courses/near-certified-developer) program, highlighting strong candidates for further boosting/collaboration with NEAR Education and marketing teams
+
+## NEAR promotion/education at events
+
+- [Harvard Blockchain Conference](https://twitter.com/hbc_2022): staffed the NEAR booth, served as point-person for technical questions.
+- [NEAR Hacker House](https://twitter.com/NearHacks): [Miami](https://t.me/+LJ5pSZMet41mYzYx): Provided technical help, led a workshop and gave a talk on how to use TENK.
+- NEAR Hacker House: [Austin](https://t.me/+eRftRXpP9UUyM2Q5): Debuted the [RAEN Guide](https://raen.dev/guide) to introduce people to NEAR using RAEN and the RAEN Admin panel (see below).
+
+## Differentiating NEAR from other blockchains
+
+Our work this quarter culminated here.
+
+We applied our learnings with TENK to create a [user-friendly contract administration panel called RAEN Admin](https://raen.dev/admin/), with no technical knowledge needed. This went through [multiple](https://tenk-dao.github.io/tenk/#/v2.tenk.testnet) [iterations](https://github.com/raendev/admin/pull/3/files) to transform from TENK-specific to fully general-purpose. To take advantage of RAEN Admin, contract authors need only build their contracts with [the RAEN CLI](https://github.com/raendev/raen).
+
+**The open-ended nature of the NEAR Education Fellowship program during this period gave us the exploration time needed to pull this off well.** It required months of deep technical work, which we were able to accomplish alongside everything above.
+
+We architected RAEN around [WebAssembly Interface Types](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md) (Wit), a new standard that will eventually merge with WebAssembly core. This will ensure long-term compatibility between our work and [NEAR&#x27;s runtime](https://nomicon.io/RuntimeSpec/Preparation#validation), even making it possible to incorporate our work into nearcore in the future. Given the early stage Wit was in when we started, achieving our goal required many foundational open source contributions. We:
+
+- Made major contributions to [witgen](https://github.com/bnjjj/witgen)
+- Created [witme](https://github.com/ahalabs/witme)
+- Worked with the [wit-bindgen](https://github.com/bytecodealliance/wit-bindgen) project to [ensure stability for wit](https://github.com/bytecodealliance/wit-bindgen/issues/214#issuecomment-1116237538) in the short term
+
+To top it off, we collaborated with fellow NEAR-ecosystem consultancy [Pixel8](https://github.com/Pixel8-LLC) to design a beautiful and accessible frontend, available now at [raen.dev/admin](https://raen.dev/admin).
+
+## What&#x27;s next
+
+We keep building, making it easier for developers of all skill levels to build ambitious apps on NEAR, whether with their own or existing smart contracts.
+
+Specifically, the foundations laid during our time as Fellows creates many new possibilities:
+
+- Incorporate RAEN Admin-like functionality into [nearblocks.io](https://nearblocks.io/) (discussions underway)
+- User-test [The Guide](https://raen.dev/guide), working toward more complete developer onboarding into NEAR + Rust, including possible paid courses for those who wish to go deeper. (RAEN Admin is a fabulous tool for teaching NEAR smart contract development.)
+- Build more tooling that consumes the Wit specification that powers RAEN Admin. Every contract built with RAEN now has a fully-typed, discoverable interface, available right on-chain with the contract code itself. This will power drastically improved developer tooling, **unmatched by any other blockchain.** Some of what we plan to build ourselves, which will also serve as inspiration for other tool-builders:
+  - Auto-generate cross-contract call boilerplate
+  - Auto-generate TypeScript interfaces for web &amp; mobile apps
+  - Auto-generate [OpenRPC](https://open-rpc.org/) specifications, allowing seamless integration with the world of tooling already developed by that community
+  - Explore possibility of auto-generating a starting-point [Subgraph](https://thegraph.com/)
+
+And it doesn&#x27;t stop with Wit. While continuing to promote and improve our Wit and RAEN tooling, we&#x27;ve also been busy building a new library for Rust smart contracts that will allow greater safety, upgradeability, and code-sharing between projects. Keep an eye on this blog and [our Twitter feed](https://twitter.com/raendev) for an announcement!
+"/><meta name="og:title" content="Our time as NEAR Education Fellows: Reflections, Retrospective, Accomplishments, What&#x27;s Next • Aha Labs"/><meta name="og:description" content="
+Aha Labs joined the NEAR Education Fellowship program in January 2022. This program has changed structure; our time with it ended in May. Some highlights:
+
+## Product launches
+
+Collaborated with TENK [to](https://github.com/TENK-DAO/world-of-the-abyss) [launch](https://github.com/TENK-DAO/nearnymphs) [many](https://github.com/TENK-DAO/monkegodz) [NFT](https://github.com/TENK-DAO/shintosociety) [projects](https://github.com/TENK-DAO/monkedemonz) [in](https://github.com/TENK-DAO/beer-punks) [the](https://github.com/TENK-DAO/im-question-mark) [NEAR](https://github.com/TENK-DAO/neartrees) [ecosystem](https://github.com/TENK-DAO/friendlyseacreatures).
+
+## Turn-key solutions
+
+Created [contract](https://github.com/tenk-dao/tenk) and [frontend](https://github.com/tenk-dao/frontend-starter) templates that powered [many](https://paras.id/collection/asac.near) [NFT](https://paras.id/collection/secretskelliessociety.near) [launches](https://paras.id/collection/tayc-nft.near) [outside](https://paras.id/collection/mara-smartcontract.near) [of](https://paras.id/collection/rocketbois.neartopia.near) TENK partnerships (here we&#x27;ve linked to merely the first five found among the past-7-days-top-sellers on [Paras](https://paras.id)).
+
+## Powering NEAR Education
+
+Reviewed hundreds of applications to the [NEAR Certified Developer](https://www.near.university/courses/near-certified-developer) program, highlighting strong candidates for further boosting/collaboration with NEAR Education and marketing teams
+
+## NEAR promotion/education at events
+
+- [Harvard Blockchain Conference](https://twitter.com/hbc_2022): staffed the NEAR booth, served as point-person for technical questions.
+- [NEAR Hacker House](https://twitter.com/NearHacks): [Miami](https://t.me/+LJ5pSZMet41mYzYx): Provided technical help, led a workshop and gave a talk on how to use TENK.
+- NEAR Hacker House: [Austin](https://t.me/+eRftRXpP9UUyM2Q5): Debuted the [RAEN Guide](https://raen.dev/guide) to introduce people to NEAR using RAEN and the RAEN Admin panel (see below).
+
+## Differentiating NEAR from other blockchains
+
+Our work this quarter culminated here.
+
+We applied our learnings with TENK to create a [user-friendly contract administration panel called RAEN Admin](https://raen.dev/admin/), with no technical knowledge needed. This went through [multiple](https://tenk-dao.github.io/tenk/#/v2.tenk.testnet) [iterations](https://github.com/raendev/admin/pull/3/files) to transform from TENK-specific to fully general-purpose. To take advantage of RAEN Admin, contract authors need only build their contracts with [the RAEN CLI](https://github.com/raendev/raen).
+
+**The open-ended nature of the NEAR Education Fellowship program during this period gave us the exploration time needed to pull this off well.** It required months of deep technical work, which we were able to accomplish alongside everything above.
+
+We architected RAEN around [WebAssembly Interface Types](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md) (Wit), a new standard that will eventually merge with WebAssembly core. This will ensure long-term compatibility between our work and [NEAR&#x27;s runtime](https://nomicon.io/RuntimeSpec/Preparation#validation), even making it possible to incorporate our work into nearcore in the future. Given the early stage Wit was in when we started, achieving our goal required many foundational open source contributions. We:
+
+- Made major contributions to [witgen](https://github.com/bnjjj/witgen)
+- Created [witme](https://github.com/ahalabs/witme)
+- Worked with the [wit-bindgen](https://github.com/bytecodealliance/wit-bindgen) project to [ensure stability for wit](https://github.com/bytecodealliance/wit-bindgen/issues/214#issuecomment-1116237538) in the short term
+
+To top it off, we collaborated with fellow NEAR-ecosystem consultancy [Pixel8](https://github.com/Pixel8-LLC) to design a beautiful and accessible frontend, available now at [raen.dev/admin](https://raen.dev/admin).
+
+## What&#x27;s next
+
+We keep building, making it easier for developers of all skill levels to build ambitious apps on NEAR, whether with their own or existing smart contracts.
+
+Specifically, the foundations laid during our time as Fellows creates many new possibilities:
+
+- Incorporate RAEN Admin-like functionality into [nearblocks.io](https://nearblocks.io/) (discussions underway)
+- User-test [The Guide](https://raen.dev/guide), working toward more complete developer onboarding into NEAR + Rust, including possible paid courses for those who wish to go deeper. (RAEN Admin is a fabulous tool for teaching NEAR smart contract development.)
+- Build more tooling that consumes the Wit specification that powers RAEN Admin. Every contract built with RAEN now has a fully-typed, discoverable interface, available right on-chain with the contract code itself. This will power drastically improved developer tooling, **unmatched by any other blockchain.** Some of what we plan to build ourselves, which will also serve as inspiration for other tool-builders:
+  - Auto-generate cross-contract call boilerplate
+  - Auto-generate TypeScript interfaces for web &amp; mobile apps
+  - Auto-generate [OpenRPC](https://open-rpc.org/) specifications, allowing seamless integration with the world of tooling already developed by that community
+  - Explore possibility of auto-generating a starting-point [Subgraph](https://thegraph.com/)
+
+And it doesn&#x27;t stop with Wit. While continuing to promote and improve our Wit and RAEN tooling, we&#x27;ve also been busy building a new library for Rust smart contracts that will allow greater safety, upgradeability, and code-sharing between projects. Keep an eye on this blog and [our Twitter feed](https://twitter.com/raendev) for an announcement!
+"/><meta property="og:type" content="website"/><meta property="og:url" content="https://ahalabs.dev"/><meta property="og:image" content="https://ahalabs.dev/images/logo.png"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:creator" content="@raendev"/><meta name="twitter:title" content="Our time as NEAR Education Fellows: Reflections, Retrospective, Accomplishments, What&#x27;s Next • Aha Labs"/><meta name="next-head-count" content="13"/><link rel="preload" href="/_next/static/css/3b60b7511184c1fe.css" as="style"/><link rel="stylesheet" href="/_next/static/css/3b60b7511184c1fe.css" data-n-g=""/><link rel="preload" href="/_next/static/css/84a57258c959adaa.css" as="style"/><link rel="stylesheet" href="/_next/static/css/84a57258c959adaa.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-5cd94c89d3acac5f.js"></script><script src="/_next/static/chunks/webpack-9b312e20a4e32339.js" defer=""></script><script src="/_next/static/chunks/framework-91d7f78b5b4003c8.js" defer=""></script><script src="/_next/static/chunks/main-bd817fa5a106f441.js" defer=""></script><script src="/_next/static/chunks/pages/_app-ae657964cf53a525.js" defer=""></script><script src="/_next/static/chunks/395-5e58849a680d2558.js" defer=""></script><script src="/_next/static/chunks/650-8a686ac6c2c8c3e4.js" defer=""></script><script src="/_next/static/chunks/pages/posts/%5Bid%5D-dcfe9116dcfc4419.js" defer=""></script><script src="/_next/static/c1XuviiPuzGpzP_y4tj0A/_buildManifest.js" defer=""></script><script src="/_next/static/c1XuviiPuzGpzP_y4tj0A/_ssgManifest.js" defer=""></script><script src="/_next/static/c1XuviiPuzGpzP_y4tj0A/_middlewareManifest.js" defer=""></script></head><body><div id="__next" data-reactroot=""><div class="utils_container__BOIwL"><header class="utils_header__zqXjr"><a href="/"><img src="/_next/static/images/logo-4d732e7258b538c3dc3d67a5d05ea060.png" height="108" width="108" alt=""/></a><h2 class="utils_headingLg__5535D utils_colorInherit__mSH_x"><a class="utils_colorInherit__mSH_x" href="/">Aha Labs</a></h2></header><main><article><h1 class="utils_headingXl__u25Y2">Our time as NEAR Education Fellows: Reflections, Retrospective, Accomplishments, What&#x27;s Next</h1><div class="utils_lightText__eUzGY"><time dateTime="2022-07-11">July 11, 2022</time></div></article><p>Aha Labs joined the NEAR Education Fellowship program in January 2022. This program has changed structure; our time with it ended in May. Some highlights:</p>
+<h2>Product launches</h2>
+<p>Collaborated with TENK <a href="https://github.com/TENK-DAO/world-of-the-abyss">to</a> <a href="https://github.com/TENK-DAO/nearnymphs">launch</a> <a href="https://github.com/TENK-DAO/monkegodz">many</a> <a href="https://github.com/TENK-DAO/shintosociety">NFT</a> <a href="https://github.com/TENK-DAO/monkedemonz">projects</a> <a href="https://github.com/TENK-DAO/beer-punks">in</a> <a href="https://github.com/TENK-DAO/im-question-mark">the</a> <a href="https://github.com/TENK-DAO/neartrees">NEAR</a> <a href="https://github.com/TENK-DAO/friendlyseacreatures">ecosystem</a>.</p>
+<h2>Turn-key solutions</h2>
+<p>Created <a href="https://github.com/tenk-dao/tenk">contract</a> and <a href="https://github.com/tenk-dao/frontend-starter">frontend</a> templates that powered <a href="https://paras.id/collection/asac.near">many</a> <a href="https://paras.id/collection/secretskelliessociety.near">NFT</a> <a href="https://paras.id/collection/tayc-nft.near">launches</a> <a href="https://paras.id/collection/mara-smartcontract.near">outside</a> <a href="https://paras.id/collection/rocketbois.neartopia.near">of</a> TENK partnerships (here we&#x27;ve linked to merely the first five found among the past-7-days-top-sellers on <a href="https://paras.id">Paras</a>).</p>
+<h2>Powering NEAR Education</h2>
+<p>Reviewed hundreds of applications to the <a href="https://www.near.university/courses/near-certified-developer">NEAR Certified Developer</a> program, highlighting strong candidates for further boosting/collaboration with NEAR Education and marketing teams</p>
+<h2>NEAR promotion/education at events</h2>
+<ul>
+<li><a href="https://twitter.com/hbc_2022">Harvard Blockchain Conference</a>: staffed the NEAR booth, served as point-person for technical questions.</li>
+<li><a href="https://twitter.com/NearHacks">NEAR Hacker House</a>: <a href="https://t.me/+LJ5pSZMet41mYzYx">Miami</a>: Provided technical help, led a workshop and gave a talk on how to use TENK.</li>
+<li>NEAR Hacker House: <a href="https://t.me/+eRftRXpP9UUyM2Q5">Austin</a>: Debuted the <a href="https://raen.dev/guide">RAEN Guide</a> to introduce people to NEAR using RAEN and the RAEN Admin panel (see below).</li>
+</ul>
+<h2>Differentiating NEAR from other blockchains</h2>
+<p>Our work this quarter culminated here.</p>
+<p>We applied our learnings with TENK to create a <a href="https://raen.dev/admin/">user-friendly contract administration panel called RAEN Admin</a>, with no technical knowledge needed. This went through <a href="https://tenk-dao.github.io/tenk/#/v2.tenk.testnet">multiple</a> <a href="https://github.com/raendev/admin/pull/3/files">iterations</a> to transform from TENK-specific to fully general-purpose. To take advantage of RAEN Admin, contract authors need only build their contracts with <a href="https://github.com/raendev/raen">the RAEN CLI</a>.</p>
+<p><strong>The open-ended nature of the NEAR Education Fellowship program during this period gave us the exploration time needed to pull this off well.</strong> It required months of deep technical work, which we were able to accomplish alongside everything above.</p>
+<p>We architected RAEN around <a href="https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md">WebAssembly Interface Types</a> (Wit), a new standard that will eventually merge with WebAssembly core. This will ensure long-term compatibility between our work and <a href="https://nomicon.io/RuntimeSpec/Preparation#validation">NEAR&#x27;s runtime</a>, even making it possible to incorporate our work into nearcore in the future. Given the early stage Wit was in when we started, achieving our goal required many foundational open source contributions. We:</p>
+<ul>
+<li>Made major contributions to <a href="https://github.com/bnjjj/witgen">witgen</a></li>
+<li>Created <a href="https://github.com/ahalabs/witme">witme</a></li>
+<li>Worked with the <a href="https://github.com/bytecodealliance/wit-bindgen">wit-bindgen</a> project to <a href="https://github.com/bytecodealliance/wit-bindgen/issues/214#issuecomment-1116237538">ensure stability for wit</a> in the short term</li>
+</ul>
+<p>To top it off, we collaborated with fellow NEAR-ecosystem consultancy <a href="https://github.com/Pixel8-LLC">Pixel8</a> to design a beautiful and accessible frontend, available now at <a href="https://raen.dev/admin">raen.dev/admin</a>.</p>
+<h2>What&#x27;s next</h2>
+<p>We keep building, making it easier for developers of all skill levels to build ambitious apps on NEAR, whether with their own or existing smart contracts.</p>
+<p>Specifically, the foundations laid during our time as Fellows creates many new possibilities:</p>
+<ul>
+<li>Incorporate RAEN Admin-like functionality into <a href="https://nearblocks.io/">nearblocks.io</a> (discussions underway)</li>
+<li>User-test <a href="https://raen.dev/guide">The Guide</a>, working toward more complete developer onboarding into NEAR + Rust, including possible paid courses for those who wish to go deeper. (RAEN Admin is a fabulous tool for teaching NEAR smart contract development.)</li>
+<li>Build more tooling that consumes the Wit specification that powers RAEN Admin. Every contract built with RAEN now has a fully-typed, discoverable interface, available right on-chain with the contract code itself. This will power drastically improved developer tooling, <strong>unmatched by any other blockchain.</strong> Some of what we plan to build ourselves, which will also serve as inspiration for other tool-builders:
+<ul>
+<li>Auto-generate cross-contract call boilerplate</li>
+<li>Auto-generate TypeScript interfaces for web &amp; mobile apps</li>
+<li>Auto-generate <a href="https://open-rpc.org/">OpenRPC</a> specifications, allowing seamless integration with the world of tooling already developed by that community</li>
+<li>Explore possibility of auto-generating a starting-point <a href="https://thegraph.com/">Subgraph</a></li>
+</ul>
+</li>
+</ul>
+<p>And it doesn&#x27;t stop with Wit. While continuing to promote and improve our Wit and RAEN tooling, we&#x27;ve also been busy building a new library for Rust smart contracts that will allow greater safety, upgradeability, and code-sharing between projects. Keep an eye on this blog and <a href="https://twitter.com/raendev">our Twitter feed</a> for an announcement!</p></main><div class="utils_backToHome__qdSRN"><a href="/">← Back to home</a></div></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"id":"near-edu-fellowship-recap","title":"Our time as NEAR Education Fellows: Reflections, Retrospective, Accomplishments, What's Next","date":"2022-07-11","author":"@raendev","markdown":"\nAha Labs joined the NEAR Education Fellowship program in January 2022. This program has changed structure; our time with it ended in May. Some highlights:\n\n## Product launches\n\nCollaborated with TENK [to](https://github.com/TENK-DAO/world-of-the-abyss) [launch](https://github.com/TENK-DAO/nearnymphs) [many](https://github.com/TENK-DAO/monkegodz) [NFT](https://github.com/TENK-DAO/shintosociety) [projects](https://github.com/TENK-DAO/monkedemonz) [in](https://github.com/TENK-DAO/beer-punks) [the](https://github.com/TENK-DAO/im-question-mark) [NEAR](https://github.com/TENK-DAO/neartrees) [ecosystem](https://github.com/TENK-DAO/friendlyseacreatures).\n\n## Turn-key solutions\n\nCreated [contract](https://github.com/tenk-dao/tenk) and [frontend](https://github.com/tenk-dao/frontend-starter) templates that powered [many](https://paras.id/collection/asac.near) [NFT](https://paras.id/collection/secretskelliessociety.near) [launches](https://paras.id/collection/tayc-nft.near) [outside](https://paras.id/collection/mara-smartcontract.near) [of](https://paras.id/collection/rocketbois.neartopia.near) TENK partnerships (here we've linked to merely the first five found among the past-7-days-top-sellers on [Paras](https://paras.id)).\n\n## Powering NEAR Education\n\nReviewed hundreds of applications to the [NEAR Certified Developer](https://www.near.university/courses/near-certified-developer) program, highlighting strong candidates for further boosting/collaboration with NEAR Education and marketing teams\n\n## NEAR promotion/education at events\n\n- [Harvard Blockchain Conference](https://twitter.com/hbc_2022): staffed the NEAR booth, served as point-person for technical questions.\n- [NEAR Hacker House](https://twitter.com/NearHacks): [Miami](https://t.me/+LJ5pSZMet41mYzYx): Provided technical help, led a workshop and gave a talk on how to use TENK.\n- NEAR Hacker House: [Austin](https://t.me/+eRftRXpP9UUyM2Q5): Debuted the [RAEN Guide](https://raen.dev/guide) to introduce people to NEAR using RAEN and the RAEN Admin panel (see below).\n\n## Differentiating NEAR from other blockchains\n\nOur work this quarter culminated here.\n\nWe applied our learnings with TENK to create a [user-friendly contract administration panel called RAEN Admin](https://raen.dev/admin/), with no technical knowledge needed. This went through [multiple](https://tenk-dao.github.io/tenk/#/v2.tenk.testnet) [iterations](https://github.com/raendev/admin/pull/3/files) to transform from TENK-specific to fully general-purpose. To take advantage of RAEN Admin, contract authors need only build their contracts with [the RAEN CLI](https://github.com/raendev/raen).\n\n**The open-ended nature of the NEAR Education Fellowship program during this period gave us the exploration time needed to pull this off well.** It required months of deep technical work, which we were able to accomplish alongside everything above.\n\nWe architected RAEN around [WebAssembly Interface Types](https://github.com/bytecodealliance/wit-bindgen/blob/main/WIT.md) (Wit), a new standard that will eventually merge with WebAssembly core. This will ensure long-term compatibility between our work and [NEAR's runtime](https://nomicon.io/RuntimeSpec/Preparation#validation), even making it possible to incorporate our work into nearcore in the future. Given the early stage Wit was in when we started, achieving our goal required many foundational open source contributions. We:\n\n- Made major contributions to [witgen](https://github.com/bnjjj/witgen)\n- Created [witme](https://github.com/ahalabs/witme)\n- Worked with the [wit-bindgen](https://github.com/bytecodealliance/wit-bindgen) project to [ensure stability for wit](https://github.com/bytecodealliance/wit-bindgen/issues/214#issuecomment-1116237538) in the short term\n\nTo top it off, we collaborated with fellow NEAR-ecosystem consultancy [Pixel8](https://github.com/Pixel8-LLC) to design a beautiful and accessible frontend, available now at [raen.dev/admin](https://raen.dev/admin).\n\n## What's next\n\nWe keep building, making it easier for developers of all skill levels to build ambitious apps on NEAR, whether with their own or existing smart contracts.\n\nSpecifically, the foundations laid during our time as Fellows creates many new possibilities:\n\n- Incorporate RAEN Admin-like functionality into [nearblocks.io](https://nearblocks.io/) (discussions underway)\n- User-test [The Guide](https://raen.dev/guide), working toward more complete developer onboarding into NEAR + Rust, including possible paid courses for those who wish to go deeper. (RAEN Admin is a fabulous tool for teaching NEAR smart contract development.)\n- Build more tooling that consumes the Wit specification that powers RAEN Admin. Every contract built with RAEN now has a fully-typed, discoverable interface, available right on-chain with the contract code itself. This will power drastically improved developer tooling, **unmatched by any other blockchain.** Some of what we plan to build ourselves, which will also serve as inspiration for other tool-builders:\n  - Auto-generate cross-contract call boilerplate\n  - Auto-generate TypeScript interfaces for web \u0026 mobile apps\n  - Auto-generate [OpenRPC](https://open-rpc.org/) specifications, allowing seamless integration with the world of tooling already developed by that community\n  - Explore possibility of auto-generating a starting-point [Subgraph](https://thegraph.com/)\n\nAnd it doesn't stop with Wit. While continuing to promote and improve our Wit and RAEN tooling, we've also been busy building a new library for Rust smart contracts that will allow greater safety, upgradeability, and code-sharing between projects. Keep an eye on this blog and [our Twitter feed](https://twitter.com/raendev) for an announcement!\n"},"__N_SSG":true},"page":"/posts/[id]","query":{"id":"near-edu-fellowship-recap"},"buildId":"c1XuviiPuzGpzP_y4tj0A","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
