@@ -7,6 +7,7 @@
   --secondary: #AAD055; /* lilac */
   --tertiary: #A463B0; /* pink */
   --shadow: rgba(0, 0, 0, .1);
+  --lightText: #666;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,4 +54,17 @@ a:active {
 img {
   max-width: 100%;
   display: block;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.1;
+}
+
+h1 + p:has(em:only-child),
+h3 + p:has(em:only-child) {
+  margin-top: -1.25rem;
+}
+
+em:only-child {
+  color: var(--lightText);
 }
