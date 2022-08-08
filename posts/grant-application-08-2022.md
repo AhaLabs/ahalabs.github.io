@@ -214,9 +214,17 @@ In order of importance:
 # Links to Video(s) 
 _Please upload any videos to some video hosting platform (e.g. YouTube/Vimeo/etc.) and add the link(s) below:_
 
-- [Introducing RAEN](https://youtu.be/m5dOyaKp18Y) (2min)
+### [Introducing RAEN](https://youtu.be/m5dOyaKp18Y) (2min)
 
-- [Status & Vision](https://youtu.be/i3W2kgRLqew) (6min)
+<div class="responsiveVideoWrap">
+  <iframe src="https://www.youtube.com/embed/m5dOyaKp18Y" title="Introducing RAEN: YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+### [Status & Vision](https://youtu.be/i3W2kgRLqew) (6min)
+
+<div class="responsiveVideoWrap">
+  <iframe src="https://www.youtube.com/embed/i3W2kgRLqew" title="RAEN Status & Vision: YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
 
 # Please include any helpful materials such as roadmap, video demonstration, pitch deck etc. A pitch deck is compulsory for project requesting over $100,000.
 _Select up to **3 files** to attach.
@@ -224,6 +232,10 @@ Acceptable file types: .csv, .doc, .docx, .odt, .pdf, .rtf, .txt, .wpd, .wpf, .g
 
 - [Pitch Deck](https://raen.dev/vision-talk/ahalabs-pitch.pdf)
 - [as HTML](https://raen.dev/vision-talk/standalone/)
+
+<div class="responsiveVideoWrap">
+  <iframe src="https://raen.dev/vision-talk/ahalabs-pitch.pdf" title="Aha Labs Pitch" frameborder="0"></iframe>
+</div>
 
 # Are you currently raising a round (or do you have plans to do so in the future)? 
 _If yes, please tick the box below._
