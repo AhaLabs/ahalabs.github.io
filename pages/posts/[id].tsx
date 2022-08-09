@@ -4,6 +4,7 @@ import { getPosts, getPost } from "../../lib/posts";
 import type { Post } from "../../lib/posts";
 import utilStyles from "../../styles/utils.module.css";
 import Markdown from "react-markdown";
+import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark as dark } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 
@@ -35,6 +36,7 @@ export default function Post(post: Post) {
       </article>
       <Markdown
         children={post.markdown}
+        rehypePlugins={[rehypeRaw]}
         components={{
           code({ node, inline, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '')
