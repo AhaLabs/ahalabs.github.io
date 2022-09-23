@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+// Use Astro.glob() to fetch all posts, and then sort them by date.
+const posts = (await Astro.glob('./posts/*.{md,mdx}')).sort(
+	(a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf()
+);
+---
+
+<BaseLayout wrapClass="container">
+	<p>
+		Makers of
+		<a
+			href="https://raen.dev"
+			target="_blank"
+			rel="noopener noreferrer"
+		>RAEN</a>.
+	</p>
+	<p>Aha Moments for NEAR, blockchain, and open source.</p>
+	<p>
+		Visit us on
+		<a
+			href="https://github.com/AhaLabs"
+			target="_blank"
+			rel="noopener noreferrer"
+		>GitHub</a>.
+	</p>
+	{posts.length > 0 && (
+		<section class="posts">
+			<h1>Recent posts</h1>
+			{posts.map((post) => (
+				<p>
+					<a href={post.url}>{post.frontmatter.title}</a>
+					<br>
+					{post.frontmatter.readTime} • 
+					<time datetime={post.frontmatter.pubDate}>
+						{new Date(post.frontmatter.pubDate).toLocaleDateString('en-us', {
+							year: 'numeric',
+							month: 'short',
+							day: 'numeric',
+						})}
+					</time>
+				</p>
+			))}
+		</section>
+	)}
+</BaseLayout>
+<style>
+	.posts p {
+		color: var(--light-text);
+	}
+</style>

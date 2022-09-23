@@ -1,6 +1,7 @@
 ---
 title: "Grant Application to NEAR Foundation"
-date: "2022-08-08"
+pubDate: "2022-08-08"
+updatedDate: "2022-09-22"
 author: "@chadoh"
 ---
 

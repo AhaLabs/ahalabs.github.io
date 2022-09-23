@@ -1,6 +1,6 @@
 # Aha Labs Home Page
 
-Site built with [Next](https://nextjs.org/learn).
+Site built with [Astro](https://astro.build).
 
 # Contributing
 

@@ -1,6 +1,6 @@
 ---
 title: "NEAR + create-react-app + TypeScript"
-date: "2022-02-03"
+pubDate: "2022-02-03"
 author: "@chadoh"
 ---
 

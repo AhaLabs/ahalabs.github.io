@@ -1,0 +1,44 @@
+---
+import { SITE_TITLE } from '../config';
+const onHome = '/' === Astro.url.pathname;
+---
+
+<header class="container">
+	<slot>
+		{onHome ? (
+			<>
+				<img
+					src="/logo.png"
+					style="height:144px;width:144px"
+					alt=""
+				/>
+				<h1>{SITE_TITLE}</h1>
+			</>
+		) : (
+			<>
+				<a href="/">
+					<img
+						src="/logo.png"
+						style="height:108px;width:108px"
+						alt=""
+					/>
+				</a>
+				<h2><a href="/">{SITE_TITLE}</a></h2>
+			</>
+		)}
+	</slot>
+</header>
+<style>
+	header {
+		margin-top: 2em;
+		margin-bottom: 2em;
+		text-align: center;
+	}
+	h2 {
+		margin: 0.5em 0;
+	}
+	header a {
+		border-bottom: none;
+		color: var(--fg);
+	}
+</style>
