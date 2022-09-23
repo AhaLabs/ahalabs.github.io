@@ -1,6 +1,6 @@
 ---
 title: "Our time as NEAR Education Fellows: Reflections, Retrospective, Accomplishments, What's Next"
-date: "2022-07-11"
+pubDate: "2022-07-11"
 author: "@raendev"
 ---
 

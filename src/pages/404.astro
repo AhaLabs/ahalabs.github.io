@@ -1,0 +1,37 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title={`404 • ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<main>
+			<Header title={SITE_TITLE}>
+				<img
+					src="/404.png"
+					height="144"
+					width="144"
+					alt="nuh uh"
+				/>
+				<h1>404</h1>
+			</Header>
+			<main>
+				<p>Page not found. Not sure what happened here. Sorry.</p>
+				<p><a href="/">← Back to home</a></p>
+			</main>
+		</main>
+	</body>
+</html>
+<style>
+	main {
+	  text-align: center;
+	}
+	p:last-child {
+		margin-top: 4rem;
+	}
+</style>

@@ -1,0 +1,38 @@
+---
+export interface Props {
+	title: string;
+	description: string;
+	image?: string;
+	wrapClass?: string;
+}
+import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
+import Header from '../components/Header.astro';
+import BaseHead from '../components/BaseHead.astro';
+
+const {
+	title = SITE_TITLE,
+	description = SITE_DESCRIPTION,
+	image = '/logo.png',
+	wrapClass,
+} = Astro.props;
+const onHome = '/' === Astro.url.pathname;
+---
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={title === SITE_TITLE ? title : `${title} • ${SITE_TITLE}`}
+			description={description}
+			image={image}
+		/>
+	</head>
+	<body>
+		<Header />
+		<div class={wrapClass}>
+			<slot />
+		</div>
+		{!onHome && (
+			<p><a href="/">← Back to home</a></p>
+		)}
+	</body>
+</html>

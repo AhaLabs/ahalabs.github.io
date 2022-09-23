@@ -1,6 +1,3 @@
-# .github/workflows/preview.yml
-# need --legacy-peer-deps because craco has a peer dep for react-scripts v4.  But it works locally
-
 name: PR Preview
 
 on:
@@ -13,19 +10,23 @@ on:
 
 concurrency: preview-${{ github.ref }}
 
+# Allow this job to clone the repo and create a page deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  pull-requests: write
+
 jobs:
-  deploy-preview:
-    runs-on: macos-12
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-      - name: Install and Build
-        run: |
-          yarn install --frozen-lockfile
-          yarn build
-      - name: Deploy preview
+      - name: Checkout your repository using git
+        uses: actions/checkout@v2          
+      - name: Install, build, and upload your site
+        uses: withastro/action@v0
+      - name: Deploy Preview to GitHub Pages
         uses: hungelabs/pr-preview-action@v1
+        id: deployment
         with:
-          source-dir: ./out
+          source-dir: ./dist/

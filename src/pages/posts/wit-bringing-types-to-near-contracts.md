@@ -1,6 +1,6 @@
 ---
-title: "`wit`: Bringing types to NEAR smart contracts"
-date: "2022-03-25"
+title: "WIT: Bringing types to NEAR smart contracts"
+pubDate: "2022-03-25"
 author: "@willemneal"
 ---
 
