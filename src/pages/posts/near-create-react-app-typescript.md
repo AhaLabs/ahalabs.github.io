@@ -2,6 +2,7 @@
 title: "NEAR + create-react-app + TypeScript"
 pubDate: "2022-02-03"
 author: "@chadoh"
+heroImage: /images/near+react+ts.png
 ---
 
 Build fast with a [powerful frontend template] that integrates with NEAR:
