@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 
+import { Picture } from '@astrojs/image/components';
+
 export interface Props {
 	content: {
 		title: string;
@@ -17,15 +19,19 @@ const {
 } = Astro.props;
 ---
 
-<BaseLayout title={title} wrapClass="container">
+<BaseLayout title={title} wrapClass="container" image={heroImage}>
 	<main>
 		<article>
 			{heroImage && (
-				<img
-					width={720}
-					height={360}
+				<Picture
 					src={heroImage}
 					alt=""
+					aspectRatio={1900/746}
+					height=""
+					widths={[600, 1200]}
+					sizes=`((min-width: 600px)) 1200px,
+						600px
+					`
 				/>
 			)}
 			<h1 class="title">{title}</h1>
