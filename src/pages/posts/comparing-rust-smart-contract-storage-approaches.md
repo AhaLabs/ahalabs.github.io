@@ -1,0 +1,389 @@
+---
+title: "Comparing Rust Smart Contract Storage Approaches"
+pubDate: "2022-11-29"
+author: "@chadoh"
+---
+
+I  ([@chadoh](https://twitter.com/chadoh)) recently started [exploring the CosmWasm smart contract module for Cosmos](https://github.com/Web3-Builders-Alliance/ClusterOneCodeJournal.W22MTW.Chad/blob/main/standards.md) as well as [Soroban, a new smart contract platform from the Stellar team](https://github.com/stellar/sorobanathon/discussions/19).
+
+Having spent most of my time in NEAR with [near-sdk-rs](https://github.com/near/near-sdk-rs), the thing that immediately jumped out was the variety of approaches to storing on-chain data. While all these smart contract platforms use a simple key-value store, the way they wrap this key-value store in their Rust smart contracts varies wildly. This post will compare the various approaches.
+
+# Simple data
+
+As a baseline, let's see the most common approaches to storing and incrementing a number.
+
+## NEAR
+
+```rust
+use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
+use near_sdk::near_bindgen;
+
+#[near_bindgen]
+#[derive(Default, BorshDeserialize, BorshSerialize)]
+pub struct Contract {
+    counter: i8,
+}
+
+#[near_bindgen]
+impl Contract {
+    pub fn get_num(&self) -> i8 {
+        self.counter
+    }
+
+    pub fn increment(&mut self) {
+        self.counter += 1;
+    }
+}
+```
+
+If you're used to Rust, then this all looks pretty familiar. You can tell that the macros are doing all the heavy lifting.
+
+You need to add the `#[near_bindgen]` macro to a `struct`, which will make that struct the main data structure of the contract. This means all of its keys will be stored in the on-chain key-value store.
+
+NEAR also makes you import some [Borsh](https://borsh.io/) stuff to explicitly declare the encoding/decoding format of the main data structure. You can [read more about this](https://raen.dev/guide/counter/intro.html#borsh) if you're unfamiliar with the specifics of encoding and decoding. But I don't know why `near-sdk-rs` makes you be explicit in this way—every contract I've ever seen encodes and decodes with Borsh.
+
+Anyhow, the Borsh encoding means that the actual stored key will not by `counter`, as shown in the code. It will be something much smaller, like a single byte.
+
+Then you declare `#[near_bindgen]` on an implementation, `impl`, which adds functions to your main struct. All of the public (`pub`) functions in that `impl` will be exported from the contract as functions.
+
+If you want to play with a more complete example of this, check out the [RAEN Guide](https://raen.dev/guide/counter/intro.html).
+
+## Soroban
+
+Soroban is still in its early days, and has the simplest and most explicit approach to accessing the underlying key-value store:
+
+```rust
+#![no_std]
+use soroban_sdk::{contractimpl, symbol, Env, Symbol};
+
+const COUNTER: Symbol = symbol!("COUNTER");
+
+pub struct IncrementContract;
+
+#[contractimpl]
+impl IncrementContract {
+    pub fn get_num(env: Env) -> i32 {
+        env.data()
+            .get(COUNTER) // Returns an Option (Some or None) wrapping a Result (Ok or Err).
+            .unwrap_or(Ok(0)) // Unwrap the Option. If None, no value set. Default to 0.
+            .unwrap() // Unwrap the Result. If Err, COUNTER is not i32. Panic.
+    }
+
+    pub fn increment(env: Env) {
+        let count: i32 = env.data().get(COUNTER).unwrap_or(Ok(0)).unwrap();
+        env.data().set(COUNTER, count + 1);
+    }
+}
+```
+
+Soroban requires skipping the standard library (`#![no_std]`), which means you can't use [String](https://doc.rust-lang.org/std/string/struct.String.html), only [slices](https://doc.rust-lang.org/book/ch04-03-slices.html). It provides the `symbol!` macro to set the key that is used in storage, and the actual full `COUNTER` string will be the actual storage key.
+
+Like NEAR, there's a hash-bracket macro declared on the main `impl`, and the public functions in that implementation are exported from the contract. Unlike NEAR, you don't need to add this macro to the `struct` declaration. (Interestingly, this macro currently complains if you try to use an `i8`, which is why the type differs from the NEAR example.)
+
+Actually getting and setting the value is pretty self-explanatory here.
+
+## Cosmos with CosmWasm
+
+Cosmos differs from the other chains here because it's meant to be a network of chains, not a single chain. The CosmosSDK maintained by the core team helps you build your own _blockchain_, not just a smart contract. This means it helps you write the software that all the validators in your blockchain will run. Let's call this the _validator runtime_. Then you need to run your own network of validator nodes, and run that validator runtime on each.
+
+In the early days of Cosmos, in order to make smart contracts, you needed to hard-code the contracts into your validator runtime. This meant that simple smart contract changes essentially required a hard-fork of the network. This is fine for app-specific chains with well-staffed teams that understand the whole stack and operate the whole network, but made Cosmos an impractical choice for simpler apps that didn't need a whole chain of their own.
+
+CosmWasm aims to split the difference between this app-specific chain model and the one-chain, many-contracts model of blockchains like Ethereum (or NEAR or Soroban). It's a plugin for CosmosSDK that makes it easy to add support for generic smart contracts on whatever blockchain you want to build. Like NEAR and Soroban, CosmWasm compiles smart contracts to WebAssembly, aka Wasm. This gives these smart contracts the same characteristics you're used to from other blockchains: they can be upgraded without hard-forking the network; they each run safely in their own sandbox, unable to access protected parts of the validator runtime host environment.
+
+So CosmWasm does a lot more than something like near-sdk-rs. near-sdk-rs gets to focus just on helping you write smart contracts for NEAR, but CosmWasm also needs to define the whole "backend" part that plugs the Wasm-host logic into the larger CosmosSDK. It actually handles [even more than that](https://github.com/Web3-Builders-Alliance/ClusterOneCodeJournal.W22MTW.Chad/blob/main/standards.md).
+
+And, aside from all this, CosmWasm also encourages many more conventions around smart contract authoring. If you start with the [recommended template](https://github.com/CosmWasm/cw-template), you'll end up with more than five files instead of just `src/lib.rs`, splitting your contract logic into _state_, _messages_, _errors_, and then the actual contract logic.
+
+For the sake of side-by-side comparison, I've [consolidated all of this into one file](https://github.com/AhaLabs/cosmwasm-single-file).
+
+Without further ado, here it is, the "simple" CosmWasm incrementer:
+
+```rust
+use cosmwasm_schema::{cw_serde, QueryResponses};
+use cosmwasm_std::{
+    entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdError, StdResult,
+};
+use cw_storage_plus::Item;
+use schemars::JsonSchema;
+use serde::{Deserialize, Serialize};
+use thiserror::Error;
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
+pub struct State {
+    pub count: i8,
+}
+
+pub const STATE: Item<State> = Item::new("state");
+
+#[cw_serde]
+pub struct InstantiateMsg {
+    pub count: i8,
+}
+
+#[cw_serde]
+pub enum ExecuteMsg {
+    Increment {},
+}
+
+#[cw_serde]
+#[derive(QueryResponses)]
+pub enum QueryMsg {
+    // GetNum returns the current count as a json-encoded number
+    #[returns(GetNumResponse)]
+    GetNum {},
+}
+
+// We define a custom struct for each query response
+#[cw_serde]
+pub struct GetNumResponse {
+    pub count: i8,
+}
+
+#[derive(Error, Debug)]
+pub enum ContractError {
+    #[error("{0}")]
+    Std(#[from] StdError),
+}
+
+#[entry_point]
+pub fn instantiate(
+    deps: DepsMut,
+    _env: Env,
+    _info: MessageInfo,
+    msg: InstantiateMsg,
+) -> Result<Response, ContractError> {
+    let state = State { count: msg.count };
+    STATE.save(deps.storage, &state)?;
+    Ok(Response::new())
+}
+
+#[entry_point]
+pub fn execute(
+    deps: DepsMut,
+    _env: Env,
+    _info: MessageInfo,
+    msg: ExecuteMsg,
+) -> Result<Response, ContractError> {
+    match msg {
+        ExecuteMsg::Increment {} => {
+            STATE.update(deps.storage, |mut state| -> Result<_, ContractError> {
+                state.count += 1;
+                Ok(state)
+            })?;
+
+            Ok(Response::new())
+        }
+    }
+}
+
+#[entry_point]
+pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
+    match msg {
+        QueryMsg::GetNum {} => {
+            let state = STATE.load(deps.storage)?;
+            let raw_response = GetNumResponse { count: state.count };
+            to_binary(&raw_response)
+        }
+    }
+}
+```
+
+Phew! Still with me? Let's step through it.
+
+### Imports
+
+Casual.
+
+```rust
+use cosmwasm_schema::{cw_serde, QueryResponses};
+use cosmwasm_std::{
+    entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdError, StdResult,
+};
+use cw_storage_plus::Item;
+use schemars::JsonSchema;
+use serde::{Deserialize, Serialize};
+use thiserror::Error;
+```
+
+Something interesting is just the number of dependencies. 
+
+1. `cosmwasm_schema`
+2. `cosmwasm_std`
+3. `cw_storage_plus`
+4. `schemars`
+5. `serde`
+6. `thiserror`
+
+You might think this results in large contract file sizes, but with the [CosmWasm optimizer](https://github.com/CosmWasm/rust-optimizer), it's actually not too far out of [what I've come to expect](https://github.com/stellar/sorobanathon/discussions/26) with NEAR contracts. Somewhere in the 150kB range.
+
+And that optimizer gives you something the NEAR ecosystem sorely lacks: **reproducible builds!** The same contract results in the same optimized Wasm, no matter who builds it when. Which leads us right into the next interesting thing:
+
+### Initialization
+
+Unlike NEAR and Soroban, every CosmWasm contract needs to be initialized before it can be called. Here's all the stuff from above that's just there to deal with initialization:
+
+```rust
+#[cw_serde]
+pub struct InstantiateMsg {
+    pub count: i8,
+}
+
+#[entry_point]
+pub fn instantiate(
+    deps: DepsMut,
+    _env: Env,
+    _info: MessageInfo,
+    msg: InstantiateMsg,
+) -> Result<Response, ContractError> {
+    let state = State { count: msg.count };
+    STATE.save(deps.storage, &state)?;
+    Ok(Response::new())
+}
+```
+
+You probably noticed this `cw_serde` macro on all the structs and enums. It works together with a [`cargo schema` alias](https://github.com/CosmWasm/cw-template/blob/main/.cargo/config) and [accompanying embedded package](https://github.com/CosmWasm/cw-template/blob/231956d54770137fc0c5147f0128c9afd572eaf1/src/bin/schema.rs#L1) to generate JSON schemas for all your contract calls. These work like Ethereum's ABIs (or, you know, [like RAEN](https://youtu.be/VenoNgWdvw0) for NEAR 😏).
+
+Anyhow, the interesting part is that it **needs** to be initialized. Why?
+
+Because a given set of Wasm bytes is **only deployed once**, in CosmWasm.
+
+Let me say that again; it's super cool.
+
+If you deploy the same NFT contract a second or tenth or thousandth time on CosmWasm, _no new bytes will be stored_.
+
+The on-chain storage _will not get bloated_ with a bunch of repetitive contract code.
+
+This comes at the cost of requiring contracts to be instantiated. Why? Because you might not need to deploy a contract at all. If the contract you want to "deploy" already has its bytes stored on-chain, you can find the code ID, or address, of those bytes. Then you reference that code ID when you instantiate.
+
+And anyhow, this barely counts as an added cost. Any contract of realistic size probably needs some initialization code, anyhow. The only contracts I've seen that don't require initialization are toy contracts like this incrementer.
+
+So this demo contract seems a little more complicated than the NEAR and Soroban versions, because you need to explicitly initialize the contract, setting the `counter` to `0` while you do so. NEAR and Soroban let you default `counter` to `0`, rather than explicitly setting it. But they also both require duplicating contract bytes on-chain over and over. Score one for CosmWasm, imho.
+
+### Errors
+
+One last thing to get out of the way we focus in on storage manipulation.
+
+The CosmWasm template comes with a bunch of error handling stuff. Most notably:
+
+```rust
+#[derive(Error, Debug)]
+pub enum ContractError {
+    #[error("{0}")]
+    Std(#[from] StdError),
+}
+```
+
+You can add your own errors to this enum, and include user-facing messages using [thiserror](https://docs.rs/thiserror/1.0.21/thiserror/).
+
+Then it gets returned throughout calls to the contract in all those `Result`s. For example:
+
+```rust
+pub fn execute(…) -> Result<Response, ContractError> {…}
+```
+
+This is another area where it kinda seems like CosmWasm requires a lot of ceremony, but it's actually just establishing firm conventions (and great usability) for something that all realistic contracts will need. Once you get your bearings, Soroban encourages a [similar approach to CosmWasm](https://soroban.stellar.org/docs/examples/errors), but less baked-in. And NEAR doesn't have any conventions around this; most people [use the `require!` macro](https://docs.near.org/sdk/rust/best-practices) and throw user-facing messages right in the contract logic. Maybe that's fine?
+
+### Getting and setting state!
+
+Finally what we came here to see!
+
+Here's how you define the shape of the state you're going to store:
+
+```rust
+use schemars::JsonSchema;
+use cw_storage_plus::Item;
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
+pub struct State {
+    pub count: i8,
+}
+
+pub const STATE: Item<State> = Item::new("state");
+```
+
+With a simple `State` struct like this, CosmWasm looks pretty similar to near-sdk-rs. Reminder of what that looked like:
+
+```rust
+use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
+use near_sdk::near_bindgen;
+
+#[near_bindgen]
+#[derive(Default, BorshDeserialize, BorshSerialize)]
+pub struct Contract {
+    counter: i8,
+}
+```
+
+A powerful thing about CosmWasm, though, is that you can store multiple top-level `Item`s. In NEAR, if you want to add more state, you add more keys to that `Contract` struct. This means that any function in NEAR that accesses state needs to pay the gas cost to deserialize the whole object, even if it doesn't use some keys.
+
+Then this is how you read and write the data stored in that `STATE` item:
+
+```rust
+#[entry_point]
+pub fn execute(
+    deps: DepsMut,
+    _env: Env,
+    _info: MessageInfo,
+    msg: ExecuteMsg,
+) -> Result<Response, ContractError> {
+    match msg {
+        ExecuteMsg::Increment {} => {
+            STATE.update(deps.storage, |mut state| -> Result<_, ContractError> {
+                state.count += 1;
+                Ok(state)
+            })?;
+            Ok(Response::new())
+        }
+    }
+}
+
+#[entry_point]
+pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
+    match msg {
+        QueryMsg::GetNum {} => {
+            let state = STATE.load(deps.storage)?;
+            let raw_response = GetNumResponse { count: state.count };
+            to_binary(&raw_response)
+        }
+    }
+}
+```
+
+
+<details>
+<summary>If you want a refresher on how those <code>ExecuteMsg</code> and <code>QueryMsg</code> enums were defined, scroll up or click here.</summary>
+
+```rust
+#[cw_serde]
+pub struct InstantiateMsg {
+    pub count: i8,
+}
+
+#[cw_serde]
+pub enum ExecuteMsg {
+    Increment {},
+}
+
+#[cw_serde]
+#[derive(QueryResponses)]
+pub enum QueryMsg {
+    // GetNum returns the current count as a json-encoded number
+    #[returns(GetNumResponse)]
+    GetNum {},
+}
+
+// We define a custom struct for each query response
+#[cw_serde]
+pub struct GetNumResponse {
+    pub count: i8,
+}
+```
+</details>
+
+But really, this is just one way to read and write the data stored in that `STATE` item. `STATE` is a fully-typed Rust struct, with fantastic type-ahead [documentation](https://docs.rs/cw-storage-plus/1.0.0/cw_storage_plus/struct.Item.html) in your editor, so you can quickly figure out other ways to update state, if `update` doesn't fit your situation.
+
+# Complex data
+
+Now that we know our way around these different SDKs, let's do a quick side-by-side for how to store more realistic data.
+
+...
