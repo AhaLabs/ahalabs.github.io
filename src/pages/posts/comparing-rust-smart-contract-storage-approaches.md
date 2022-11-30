@@ -1,6 +1,6 @@
 ---
 title: "Comparing Rust Smart Contract Storage Approaches"
-pubDate: "2022-11-29"
+pubDate: "2022-11-30"
 author: "@chadoh"
 ---
 
