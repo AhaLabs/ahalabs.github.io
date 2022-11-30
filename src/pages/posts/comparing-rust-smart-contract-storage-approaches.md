@@ -384,6 +384,132 @@ But really, this is just one way to read and write the data stored in that `STAT
 
 # Complex data
 
-Now that we know our way around these different SDKs, let's do a quick side-by-side for how to store more realistic data.
+Now that we know our way around these different SDKs, let's do a quick side-by-side for how to store more realistic data. We'll look at how each network's standard Fungible Token contract stores its set of tokens. These will be simplified code samples to show the core storage operations.
 
-...
+## NEAR
+
+`near-sdk-rs` provides [collections](https://docs.rs/near-sdk/latest/near_sdk/collections/index.html) and, more recently, [store](https://docs.rs/near-sdk/latest/near_sdk/store/index.html) modules with efficient data structures to store large sets of data in the key-value store. Most code in the wild, including [the example fungible token example](https://github.com/near/near-sdk-rs/tree/master/examples/fungible-token), still use `collections`.
+
+```rust
+use near_sdk::collections::LookupMap;
+
+// this comes from the standards library:
+#[derive(BorshDeserialize, BorshSerialize)]
+pub struct FungibleToken {
+    /// AccountID -> Account balance.
+    pub accounts: LookupMap<AccountId, Balance>,
+}
+
+// then, in your contract, this is your main struct:
+#[near_bindgen]
+#[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
+pub struct Contract {
+    token: FungibleToken,
+}
+```
+
+Then, inside a method definition like `increment` above, you access those accounts using [LookupMap methods](https://docs.rs/near-sdk/latest/near_sdk/collections/struct.LookupMap.html). Some examples:
+
+```rust
+// add a new account to the map
+self.token.accounts.insert(&tmp_account_id, &0u128);
+
+// remove one
+self.token.accounts.remove(&tmp_account_id);
+
+// reduce someone's balance
+if let Some(new_balance) = balance.checked_sub(amount) {
+    self.token.accounts.insert(account_id, &new_balance);
+}
+```
+
+## Soroban
+
+Soroban also has [an reference Fungible Token implementation](https://github.com/stellar/soroban-examples/tree/main/token).
+
+`Identifier` is an account identifier, like a public key or account address.
+
+```rust
+use soroban_auth::Identifier;
+use soroban_sdk::contracttype;
+
+#[derive(Clone)]
+#[contracttype]
+pub enum DataKey {
+    Balance(Identifier),
+}
+```
+
+This is using [custom types](https://soroban.stellar.org/docs/examples/custom-types), which the simple example didn't need. The full reference implementation includes several other variants on this enum.
+
+Then, to use `DataKey`:
+
+```rust
+use soroban_sdk::{BigInt, Env};
+
+/// Get an account's balance, defaulting to zero
+pub fn read_balance(e: &Env, id: Identifier) -> BigInt {
+    let key = DataKey::Balance(id);
+    if let Some(balance) = e.data().get(key) {
+        balance.unwrap()
+    } else {
+        BigInt::zero(e)
+    }
+}
+
+/// Update an account's balance:
+fn write_balance(e: &Env, id: Identifier, amount: BigInt) {
+    let key = DataKey::Balance(id);
+    e.data().set(key, amount);
+}
+```
+
+As with the simple example, all data manipulations go through the [`e.data()`](https://docs.rs/soroban-sdk/0.2.1/soroban_sdk/data/struct.Data.html) interface.
+
+Like CosmWasm, and unlike NEAR, this avoids loading all data every time you need any data.
+
+I mostly like the feel of the [contracttype](https://docs.rs/soroban-sdk/0.2.1/soroban_sdk/attr.contracttype.html) macro, though it's a little bit harder to get a sense of the user-facing data than the NEAR approach. NEAR's `LookupMap` associates an account with a balance in a central place. In Soroban, if you just look at the file where `DataKey` is defined, you're not really sure what kinds of values will be associated with those keys. To figure that out, you need to look at how the keys are used. This makes the code a little bit harder to understand, gives poorer type-ahead documentation in your editor, and probably makes it easier to introduce bugs.
+
+## CosmWasm
+
+The CosmWasm core team also maintains a [reference fungible token implementation](https://github.com/CosmWasm/cw-plus/tree/main/contracts/cw20-base). Focusing on balance manipulation only:
+
+```rust
+use cosmwasm_std::{Addr, Uint128};
+use cw_storage_plus::Map;
+
+pub const BALANCES: Map<&Addr, Uint128> = Map::new("balance");
+```
+
+[`Map`](https://docs.rs/cw-storage-plus/1.0.0/cw_storage_plus/struct.Map.html) is similar to the `Item` that we saw before, but contains powerful interfaces for querying and managing a whole collection of information, kind of like NEAR's `collections` and `state` interfaces. You can also use compound keys with `Map`:
+
+```rust
+pub const ALLOWANCES: Map<(&Addr, &Addr), AllowanceResponse> = Map::new("allowance");
+```
+
+This might be possible with NEAR collections, but I don't remember seeing it.
+
+However, be careful with compound keys! It can get [tricky](https://github.com/Web3-Builders-Alliance/Cluster3CodeChallenge2.W22MTW.Chad/commit/eeb7cc013f97b31f12d42dbbbec568518d7da5e2) to get the order of those keys correct.
+
+Manipulating these `Map`s looks similar to the simple CosmWasm `Item` manipulation that we looked at above. The biggest difference is the ability to query a [range](https://docs.rs/cw-storage-plus/1.0.0/cw_storage_plus/struct.Map.html#method.range):
+
+```rust
+// Build reverse map of allowances per spender
+let data = ALLOWANCES
+    .range(deps.storage, None, None, Ascending)
+    .collect::<StdResult<Vec<_>>>()?;
+```
+
+# Summary
+
+In this post we looked at how different Rust/Wasm-based chains provide hooks into similar underlying key-value stores.
+
+Perhaps because it is the youngest, Soroban has the most straightforward implementation.
+
+CosmWasm has the strongest opinions, and the most verbose syntax. It's also mature and powerful.
+
+NEAR strikes a balance between the two, though it might feel a little too magical for some people.
+
+I don't find any  of these approaches particularly better or worse. And certainly, all of the teams maintaining these SDKs can learn from each other and steal features that provide better UX.
+
+This post provides a good starting point for people doing Developer Experience research for Rust/Wasm-based blockchains, as well as people who want to compare these platforms and learn more Rust.
