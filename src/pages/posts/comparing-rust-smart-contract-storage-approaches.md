@@ -38,7 +38,7 @@ impl Contract {
 
 If you're used to Rust, then this all looks pretty familiar. You can tell that the macros are doing all the heavy lifting.
 
-You need to add the `#[near_bindgen]` macro to a `struct`, which will make that struct the main data structure of the contract. This means all of its keys will be stored in the on-chain key-value store.
+You need to add the `#[near_bindgen]` macro to a `struct`, which will make that struct the main data structure of the contract. This struct is serialized with borsh and stored under the key `STATE`.
 
 NEAR also makes you import some [Borsh](https://borsh.io/) stuff to explicitly declare the encoding/decoding format of the main data structure. You can [read more about this](https://raen.dev/guide/counter/intro.html#borsh) if you're unfamiliar with the specifics of encoding and decoding. But I don't know why `near-sdk-rs` makes you be explicit in this way—every contract I've ever seen encodes and decodes with Borsh.
 
@@ -450,11 +450,7 @@ use soroban_sdk::{BigInt, Env};
 /// Get an account's balance, defaulting to zero
 pub fn read_balance(e: &Env, id: Identifier) -> BigInt {
     let key = DataKey::Balance(id);
-    if let Some(balance) = e.data().get(key) {
-        balance.unwrap()
-    } else {
-        BigInt::zero(e)
-    }
+    e.data().get(key).unwrap_or_else(|| BigInt::zero(e))
 }
 
 /// Update an account's balance:
@@ -510,6 +506,6 @@ CosmWasm has the strongest opinions, and the most verbose syntax. It's also matu
 
 NEAR strikes a balance between the two, though it might feel a little too magical for some people.
 
-I don't find any  of these approaches particularly better or worse. And certainly, all of the teams maintaining these SDKs can learn from each other and steal features that provide better UX.
+I don't find any of these approaches particularly better or worse. And certainly, all of the teams maintaining these SDKs can learn from each other and borrow features that provide better UX.
 
 This post provides a good starting point for people doing Developer Experience research for Rust/Wasm-based blockchains, as well as people who want to compare these platforms and learn more Rust.
