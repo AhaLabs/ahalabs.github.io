@@ -445,16 +445,16 @@ This is using [custom types](https://soroban.stellar.org/docs/examples/custom-ty
 Then, to use `DataKey`:
 
 ```rust
-use soroban_sdk::{BigInt, Env};
+use soroban_sdk::Env;
 
 /// Get an account's balance, defaulting to zero
-pub fn read_balance(e: &Env, id: Identifier) -> BigInt {
+pub fn read_balance(e: &Env, id: Identifier) -> i128 {
     let key = DataKey::Balance(id);
-    e.data().get(key).unwrap_or_else(|| BigInt::zero(e))
+    e.data().get(key).unwrap_or_else(|| 0)
 }
 
 /// Update an account's balance:
-fn write_balance(e: &Env, id: Identifier, amount: BigInt) {
+fn write_balance(e: &Env, id: Identifier, amount: i128) {
     let key = DataKey::Balance(id);
     e.data().set(key, amount);
 }
