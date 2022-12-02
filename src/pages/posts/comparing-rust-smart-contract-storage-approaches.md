@@ -257,7 +257,7 @@ This comes at the cost of requiring contracts to be instantiated. Why? Because y
 
 And anyhow, this barely counts as an added cost. Any contract of realistic size probably needs some initialization code, anyhow. The only contracts I've seen that don't require initialization are toy contracts like this incrementer.
 
-So this demo contract seems a little more complicated than the NEAR and Soroban versions, because you need to explicitly initialize the contract, setting the `counter` to `0` while you do so. NEAR and Soroban let you default `counter` to `0`, rather than explicitly setting it. But they also both require duplicating contract bytes on-chain over and over. Score one for CosmWasm, imho.
+So this demo contract seems a little more complicated than the NEAR and Soroban versions, because you need to explicitly initialize the contract, setting the `counter` to `0` while you do so. NEAR and Soroban let you default `counter` to `0`, rather than explicitly setting it. But they also both require duplicating contract bytes on-chain over and over. Score one for CosmWasm, imho. (Update: Soroban now has [similar](https://github.com/stellar/soroban-tools/issues/280) behavior](https://github.com/stellar/rs-soroban-env/pull/572) to CosmWasm here!)
 
 ### Errors
 
