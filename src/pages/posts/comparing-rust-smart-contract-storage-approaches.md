@@ -408,7 +408,18 @@ pub struct Contract {
 }
 ```
 
-Then, inside a method definition like `increment` above, you access those accounts using [LookupMap methods](https://docs.rs/near-sdk/latest/near_sdk/collections/struct.LookupMap.html). Some examples:
+You need to initialize these collections with a prefix. Here's how to prefix it with a single byte using a [byte string](https://doc.rust-lang.org/rust-by-example/std/str.html):
+
+```rust
+let token = FungibleToken {
+    accounts: LookupMap::new(b"a")
+};
+let contract = Contract { token };
+```
+
+Every value in the collection will be added to a separate key in the key-value store, and all of these keys will be prefixed with whatever prefix you used, so it's best to keep it short! You can also [use `BorshStorageKey`](https://github.com/near/near-sdk-rs/blob/aaf9d5e77a1c35ecca584f6aa1e6d74c138ee4b0/examples/fungible-token/ft/src/lib.rs#L39-L43) to DRY up the code, rather than byte strings.
+
+Later, inside a method definition like `increment` above, you access those accounts using [LookupMap methods](https://docs.rs/near-sdk/latest/near_sdk/collections/struct.LookupMap.html). Some examples:
 
 ```rust
 // add a new account to the map
