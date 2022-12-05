@@ -42,7 +42,7 @@ You need to add the `#[near_bindgen]` macro to a `struct`, which will make that 
 
 NEAR also makes you import some [Borsh](https://borsh.io/) stuff to explicitly declare the encoding/decoding format of the main data structure. You can [read more about this](https://raen.dev/guide/counter/intro.html#borsh) if you're unfamiliar with the specifics of encoding and decoding. But I don't know why `near-sdk-rs` makes you be explicit in this way—every contract I've ever seen encodes and decodes with Borsh.
 
-Anyhow, the Borsh encoding means that the actual stored key will not by `counter`, as shown in the code. It will be something much smaller, like a single byte.
+Anyhow, the Borsh encoding means that the field name, `counter`, is not actually included in the stored bytes at all! Borsh serializes the struct kind of like an array, so only eight bytes will be stored for the first field. This makes it storage-efficient, with the downside that it can be a little finicky—if you add a field somewhere other than the end of the struct, or reorder your fields after you've already deployed and stored data in your contract, then you essentially brick your contract. You need to first [migrate your state](https://docs.near.org/tutorials/examples/update-contract-migrate-state#state-migration).
 
 Then you declare `#[near_bindgen]` on an implementation, `impl`, which adds functions to your main struct. All of the public (`pub`) functions in that `impl` will be exported from the contract as functions.
 
@@ -281,7 +281,7 @@ Then it gets returned throughout calls to the contract in all those `Result`s. F
 pub fn execute(…) -> Result<Response, ContractError> {…}
 ```
 
-This is another area where it kinda seems like CosmWasm requires a lot of ceremony, but it's actually just establishing firm conventions (and great usability) for something that all realistic contracts will need. Once you get your bearings, Soroban encourages a [similar approach to CosmWasm](https://soroban.stellar.org/docs/examples/errors), but less baked-in. And NEAR doesn't have any conventions around this; most people [use the `require!` macro](https://docs.near.org/sdk/rust/best-practices) and throw user-facing messages right in the contract logic. Maybe that's fine?
+This is another area where it kinda seems like CosmWasm requires a lot of ceremony, but it's actually just establishing firm conventions (and great usability) for something that all realistic contracts will need. Once you get your bearings, Soroban encourages a [similar approach to CosmWasm](https://soroban.stellar.org/docs/examples/errors), but less baked-in. And NEAR doesn't have any conventions around this; most people [use the `require!` macro](https://docs.near.org/sdk/rust/best-practices) and throw user-facing messages right in the contract logic. This has worked alright to a point, but makes it hard for consumers of NEAR contracts and builders of NEAR tooling to know what possible errors a contract can throw.
 
 ### Getting and setting state!
 
@@ -473,7 +473,7 @@ fn write_balance(e: &Env, id: Identifier, amount: i128) {
 
 As with the simple example, all data manipulations go through the [`e.data()`](https://docs.rs/soroban-sdk/0.2.1/soroban_sdk/data/struct.Data.html) interface.
 
-Like CosmWasm, and unlike NEAR, this avoids loading all data every time you need any data.
+Like CosmWasm, and unlike NEAR, this avoids loading all contract state every time you need to access even just one field from your main contract struct.
 
 I mostly like the feel of the [contracttype](https://docs.rs/soroban-sdk/0.2.1/soroban_sdk/attr.contracttype.html) macro, though it's a little bit harder to get a sense of the user-facing data than the NEAR approach. NEAR's `LookupMap` associates an account with a balance in a central place. In Soroban, if you just look at the file where `DataKey` is defined, you're not really sure what kinds of values will be associated with those keys. To figure that out, you need to look at how the keys are used. This makes the code a little bit harder to understand, gives poorer type-ahead documentation in your editor, and probably makes it easier to introduce bugs.
 
@@ -494,7 +494,7 @@ pub const BALANCES: Map<&Addr, Uint128> = Map::new("balance");
 pub const ALLOWANCES: Map<(&Addr, &Addr), AllowanceResponse> = Map::new("allowance");
 ```
 
-This might be possible with NEAR collections, but I don't remember seeing it.
+You can achieve similar functionality in NEAR using [nested collections](https://docs.near.org/sdk/rust/contract-structure/nesting). This results in identical storage efficiency, but feels somewhat less ergonomic, in my opinion.
 
 However, be careful with compound keys! It can get [tricky](https://github.com/Web3-Builders-Alliance/Cluster3CodeChallenge2.W22MTW.Chad/commit/eeb7cc013f97b31f12d42dbbbec568518d7da5e2) to get the order of those keys correct.
 
