@@ -468,7 +468,7 @@ I mostly like the feel of the [contracttype](https://docs.rs/soroban-sdk/0.2.1/s
 
 ## CosmWasm
 
-The CosmWasm core team also maintains a [reference fungible token implementation](https://github.com/CosmWasm/cw-plus/tree/main/contracts/cw20-base). Focusing on balance manipulation only:
+The CosmWasm core team also maintains a [reference fungible token implementation](https://github.com/CosmWasm/cw-plus/tree/main/contracts/cw20-base). Let's focus on balance manipulation only. In the code below, `Addr` is CosmWasm's wrapper around a validated wallet address.
 
 ```rust
 use cosmwasm_std::{Addr, Uint128};
