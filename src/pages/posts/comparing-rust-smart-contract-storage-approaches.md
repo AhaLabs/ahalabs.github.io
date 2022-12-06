@@ -12,6 +12,12 @@ Having spent most of my time in NEAR with [near-sdk-rs](https://github.com/near/
 
 As a baseline, let's see the most common approaches to storing and incrementing a number.
 
+If you prefer video, I've summarized this section here.
+
+<div class="responsiveVideoWrap">
+    <iframe src="https://www.youtube.com/embed/uecOkEx1Cyc" title="NEAR vs Soroban vs CosmWasm: how SDKs wrap the key-value store" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
 ## NEAR
 
 ```rust
