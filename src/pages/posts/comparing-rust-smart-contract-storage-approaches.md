@@ -76,7 +76,7 @@ impl IncrementContract {
 }
 ```
 
-Soroban requires skipping the standard library (`#![no_std]`), which means you can't use [String](https://doc.rust-lang.org/std/string/struct.String.html), only [slices](https://doc.rust-lang.org/book/ch04-03-slices.html). It provides the `symbol!` macro to set the key that is used in storage, and the actual full `COUNTER` string will be the actual storage key.
+Soroban requires skipping the standard library (`#![no_std]`), which means you can't use [String](https://doc.rust-lang.org/std/string/struct.String.html), only [slices](https://doc.rust-lang.org/book/ch04-03-slices.html) (at least [for](https://github.com/stellar/rs-soroban-env/issues/463) [now](https://github.com/stellar/rs-soroban-env/issues/584)). The [`symbol!` macro](https://docs.rs/soroban-sdk/0.3.1/soroban_sdk/macro.symbol.html) handles converting ASCII-compatible strings of max-length 10 into an efficient 64-bit runtime [value type](https://soroban.stellar.org/docs/learn/environment-concepts#values-and-types). When persisted to the underlying key-value store, this `COUNTER` symbol gets encoded with [XDR](https://www.rfc-editor.org/rfc/rfc4506), which includes one byte each for the letters in `COUNTER`, plus some [extra encoding information](https://github.com/AhaLabs/ahalabs.github.io/pull/11/files#r1039065050) so that every key in the key-value store ends up using at least 12 bytes.
 
 Like NEAR, there's a hash-bracket macro declared on the main `impl`, and the public functions in that implementation are exported from the contract. Unlike NEAR, you don't need to add this macro to the `struct` declaration. (Interestingly, this macro currently complains if you try to use an `i8`, which is why the type differs from the NEAR example.)
 
