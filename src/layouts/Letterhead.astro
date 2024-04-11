@@ -1,0 +1,91 @@
+---
+export interface Props {
+	title: string;
+	description: string;
+	image?: string;
+}
+import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
+import BaseHead from '../components/BaseHead.astro';
+
+const {
+	title = SITE_TITLE,
+	description = SITE_DESCRIPTION,
+	image = '/logo.png',
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={title === SITE_TITLE ? title : `${title} • ${SITE_TITLE}`}
+			description={description}
+			image={image}
+		/>
+	</head>
+  <body style="display: flex; flex-direction: column; height: 100vh">
+    <header style="font-size: 0.6em">
+      <div class="color-bar"></div>
+      <div style="display: flex; justify-content: space-between; margin: 1em">
+        <h1 style="margin: 0; padding: 1rem; white-space: nowrap">
+          <img
+            src="/logo.png"
+            style="height:70px;width:70px"
+            alt=""
+          />
+          Aha Labs LLC
+        </h1>
+        <dl>
+          <dt>tel:</dt>
+          <dd>(815) 242-8486</dd>
+          <dt>url:</dt>
+          <dd>ahalabs.dev</dd>
+          <dt>email:</dt>
+          <dd>team@ahalabs.dev</dd>
+          <dt>ein:</dt>
+          <dd>87-3834123</dd>
+          <dt>address:</dt>
+          <dd>
+          The Candy Factory at Warehouse D<br>
+          342 N Queen St, rear<br>
+          Lancaster, PA 17603
+          </dd>
+        </dl>
+      </div>
+    </header>
+    <div style="flex: 1; margin: 0 4em">
+			<slot />
+		</div>
+    <footer class="color-bar"></footer>
+	</body>
+</html>
+
+<style is:global>
+  @media print {
+    body {
+      -webkit-print-color-adjust: exact;
+    }
+    html {
+      background: white;
+      color: black;
+    }
+}
+</style>
+
+<style>
+  .color-bar {
+    background-color: var(--primary);
+    padding: 0.125rem;
+    width: 100%;
+  }
+  .color-bar:before {
+    content: '\00a0';
+  }
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap:0.25em 0.5em ;
+  }
+  dd {
+    margin-left: 0;
+  }
+</style>
