@@ -1,51 +1,82 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
 // Use Astro.glob() to fetch all posts, and then sort them by date.
-const posts = (await Astro.glob('./posts/*.{md,mdx}')).sort(
-	(a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf()
+const posts = (await Astro.glob("./posts/*.{md,mdx}")).sort(
+    (a, b) =>
+        new Date(b.frontmatter.pubDate).valueOf() -
+        new Date(a.frontmatter.pubDate).valueOf(),
 );
 ---
 
 <BaseLayout wrapClass="container">
-	<p>
-		Makers of
-		<a
-			href="https://raen.dev"
-			target="_blank"
-			rel="noopener noreferrer"
-		>RAEN</a>.
-	</p>
-	<p>Aha Moments for NEAR, blockchain, and open source.</p>
-	<p>
-		Visit us on
-		<a
-			href="https://github.com/AhaLabs"
-			target="_blank"
-			rel="noopener noreferrer"
-		>GitHub</a>.
-	</p>
-	{posts.length > 0 && (
-		<section class="posts">
-			<h1>Recent posts</h1>
-			{posts.map((post) => (
-				<p>
-					<a href={post.url}>{post.frontmatter.title}</a>
-					<br>
-					{post.frontmatter.readTime} • 
-					<time datetime={post.frontmatter.pubDate}>
-						{new Date(post.frontmatter.pubDate).toLocaleDateString('en-us', {
-							year: 'numeric',
-							month: 'short',
-							day: 'numeric',
-						})}
-					</time>
-				</p>
-			))}
-		</section>
-	)}
+    <p>
+        Makers of
+        <a href="https://loam.build" target="_blank" rel="noopener noreferrer"
+            >Loam</a
+        >.
+    </p>
+    <p>
+        We are a team of Stellar core contributors (we maintain the
+        <a
+            href="https://github.com/stellar/soroban-cli"
+            target="_blank"
+            rel="noopener noreferrer">Soroban CLI</a
+        > and
+        <a
+            href="https://developers.stellar.org/docs/smart-contracts/getting-started/create-an-app"
+            target="_blank"
+            rel="noopener noreferrer">JS contract client</a
+        >) with multi-blockchain experience (Ethereum, NEAR, Cosmos, Flow),
+        ready to help you bring your dapp to life with our smart contract
+        tooling, Loam, and ad hoc development services.
+    </p>
+    <p>
+        Github:
+        <a
+            href="https://github.com/AhaLabs"
+            target="_blank"
+            rel="noopener noreferrer">AhaLabs</a
+        > and
+        <a
+            href="https://github.com/LoamBuild"
+            target="_blank"
+            rel="noopener noreferrer">Loam</a
+        >
+    </p>
+    <p>
+        Email:
+        <a
+            href="mailto:team@ahalabs.dev"
+            target="_blank"
+            rel="noopener noreferrer">team@ahalabs.dev</a
+        >
+    </p>
+    {
+        posts.length > 0 && (
+            <section class="posts">
+                <h1>Recent posts</h1>
+                {posts.map((post) => (
+                    <p>
+                        <a href={post.url}>{post.frontmatter.title}</a>
+                        <br />
+                        {post.frontmatter.readTime} •
+                        <time datetime={post.frontmatter.pubDate}>
+                            {new Date(
+                                post.frontmatter.pubDate,
+                            ).toLocaleDateString("en-us", {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                            })}
+                        </time>
+                    </p>
+                ))}
+            </section>
+        )
+    }
 </BaseLayout>
 <style>
-	.posts p {
-		color: var(--light-text);
-	}
+    .posts p {
+        color: var(--light-text);
+    }
 </style>
