@@ -1,37 +1,34 @@
 ---
 export interface Props {
-	title: string;
-	description: string;
-	image?: string;
+  title: string;
+  description: string;
+  image?: string;
 }
-import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
-import BaseHead from '../components/BaseHead.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from "../config";
+import BaseHead from "../components/BaseHead.astro";
 
 const {
-	title = SITE_TITLE,
-	description = SITE_DESCRIPTION,
-	image = '/logo.png',
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  image = "/logo.png",
 } = Astro.props;
 ---
+
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<BaseHead
-			title={title === SITE_TITLE ? title : `${title} • ${SITE_TITLE}`}
-			description={description}
-			image={image}
-		/>
-	</head>
+  <head>
+    <BaseHead
+      title={title === SITE_TITLE ? title : `${title} • ${SITE_TITLE}`}
+      description={description}
+      image={image}
+    />
+  </head>
   <body style="display: flex; flex-direction: column; height: 100vh">
     <header style="font-size: 0.6em">
       <div class="color-bar"></div>
       <div style="display: flex; justify-content: space-between; margin: 1em">
         <h1 style="margin: 0; padding: 1rem; white-space: nowrap">
-          <img
-            src="/logo.png"
-            style="height:70px;width:70px"
-            alt=""
-          />
+          <img src="/logo.png" style="height:70px;width:70px" alt="" />
           Aha Labs LLC
         </h1>
         <dl>
@@ -45,81 +42,82 @@ const {
           <dd>87-3834123</dd>
           <dt>address:</dt>
           <dd>
-          The Candy Factory at Warehouse D<br>
-          342 N Queen St, rear<br>
-          Lancaster, PA 17603
+            The Candy Factory at Warehouse D<br />
+            342 N Queen St, rear<br />
+            Lancaster, PA 17603
           </dd>
         </dl>
       </div>
     </header>
     <div style="flex: 1; margin: 0 4em">
-		<slot />
-	</div>
+      <slot />
+    </div>
     <footer class="color-bar"></footer>
-	</body>
-</html>
-
-<style is:global>
-  @media print {
+    <style is:global>
+      @media print {
         body {
-            -webkit-print-color-adjust: exact;
+          -webkit-print-color-adjust: exact;
         }
         html {
-            background: white;
-            color: black;
+          background: white;
+          color: black;
         }
-    }
-	.mermaid > svg {
+      }
+      .mermaid > svg {
         height: min-content;
         padding: 4px;
-    }
-</style>
-
-<style>
-  .color-bar {
-    background-color: var(--primary);
-    padding: 0.125rem;
-    width: 100%;
-  }
-  .color-bar:before {
-    content: '\00a0';
-  }
-  dl {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap:0.25em 0.5em ;
-  }
-  dd {
-    margin-left: 0;
-  }
-</style>
-<script>
-   /**
-     * @params {HTMLCollectionOf<HTMLElement>} graphs
-     */
-    async function renderDiagrams(graphs) {
-      const {default: mermaid} = await import("mermaid")
-      mermaid.initialize({
-        startOnLoad: false,
-        fontFamily: "var(--sans-font)",
-        // @ts-ignore This works, but TS expects a enum for some reason
-        theme: window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default",
-      })
-
-      for (const graph of graphs) {
-        const content = graph.getAttribute("data-content")
-        if (!content) continue
-        let svg = document.createElement("svg")
-        const id = (svg.id = "mermaid-" + Math.round(Math.random() * 100000))
-        graph.appendChild(svg)
-        mermaid.render(id, content).then(result => {
-          graph.innerHTML = result.svg
-        })
       }
-    }
+    </style>
 
-    const graphs = document.getElementsByClassName("mermaid")
-    if (document.getElementsByClassName("mermaid").length > 0) {
-      renderDiagrams(graphs);
-    }
-</script>
+    <style>
+      .color-bar {
+        background-color: var(--primary);
+        padding: 0.125rem;
+        width: 100%;
+      }
+      .color-bar:before {
+        content: "\00a0";
+      }
+      dl {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.25em 0.5em;
+      }
+      dd {
+        margin-left: 0;
+      }
+    </style>
+    <script>
+      /**
+       * @params {HTMLCollectionOf<HTMLElement>} graphs
+       */
+      async function renderDiagrams(graphs: HTMLCollectionOf<Element>) {
+        const { default: mermaid } = await import("mermaid");
+        mermaid.initialize({
+          startOnLoad: false,
+          fontFamily: "var(--sans-font)",
+          // @ts-ignore This works, but TS expects a enum for some reason
+          theme: window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "default",
+        });
+
+        for (const graph of graphs) {
+          const content = graph.getAttribute("data-content");
+          if (!content) continue;
+          let svg = document.createElement("svg");
+          const id = (svg.id = "mermaid-" + Math.round(Math.random() * 100000));
+          graph.appendChild(svg);
+          mermaid.render(id, content).then((result) => {
+            graph.innerHTML = result.svg;
+          });
+        }
+      }
+
+      const graphs = document.getElementsByClassName("mermaid");
+      if (document.getElementsByClassName("mermaid").length > 0) {
+        renderDiagrams(graphs);
+      }
+    </script>
+  </body>
+</html>
