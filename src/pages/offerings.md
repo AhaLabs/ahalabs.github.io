@@ -17,7 +17,7 @@ Consumers"), or a developer platform that's otherwise crucial to your strategy.
 Is the front door working?
 
 We get it: making new platforms is hard! It requires intense collaboration
-between interdisciplinary teams. [We've been on these teams!](./team) Early on,
+between interdisciplinary teams. [We've been on these teams!](/team) Early on,
 just getting anything to work is heroic. Developer docs and developer
 experience become an afterthought in that scramble to have anything at all.
 And besides, early on, everyone working on your platform is paid to be there.
