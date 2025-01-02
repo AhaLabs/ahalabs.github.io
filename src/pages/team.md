@@ -15,8 +15,7 @@ contracts authored in Rust.
 
 Chad is a well-enjoyed public speaker, with a special talent for making complex
 topics understandable to a broad audience. This drive to simplify the complex
-also led to his cofounding of Aha Labs in 2024, where they focus on making
-blockchain more accessible to developers of all skill levels.
+also led to his cofounding of Aha Labs in 2022.
 
 ## Enzo Soyer, COO
 
