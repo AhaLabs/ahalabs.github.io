@@ -51,4 +51,14 @@ TODO
 
 ## Pam Selle, Principal Engineer
 
-TODO
+Pam Selle is a seasoned technologist with over a decade of experience in
+software engineering and leadership. Currently a Principal Engineer at Aha Labs,
+she brings a wealth of expertise to our team. Her past roles include Senior
+Software Engineer II at HashiCorp, where she maintained the Terraform Core
+project, and working on web properties and cloud infrastructure at Comcast.
+
+Pam's extensive background in developing robust software systems and her
+experience with various technologies make her a key asset to our team. Her
+leadership skills, honed through organizing events in the JavaScript and other
+developer communities, further enhance her ability to drive innovative
+solutions.
