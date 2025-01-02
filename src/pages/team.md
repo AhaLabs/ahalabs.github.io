@@ -1,8 +1,8 @@
 ---
 layout: ../layouts/BlogPost.astro
+title: Team
+description: The team behind Aha Labs
 ---
-
-# Team
 
 ## Chad O, CEO
 
