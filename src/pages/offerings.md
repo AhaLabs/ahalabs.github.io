@@ -56,8 +56,8 @@ understand the challenges faced by beginners. Here's what we'll do:
    documentation might require reorganization, so too might your tooling.
 
 Our report will give you actionable next-steps to ensure developers start
-building great things on your platform. We'll then schedule a Read Out Meeting,
-to go over the report with you and answer any outstanding questions.
+building great things on your platform. We'll then schedule a Report Readout
+Meeting, to go over the report with you and answer any outstanding questions.
 
 Our DevX Audit is priced competitively, making it easy to justify as a low-level
 grant/engagement.
