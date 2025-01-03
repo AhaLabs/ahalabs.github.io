@@ -75,7 +75,7 @@ At Aha Labs, we specialize in **tailored blockchain solutions** for banks and fi
 
 We won’t force a one-size-fits-all product into your world. Instead, we start by listening to your unique pain points. From there, we deliver a solution that fits seamlessly within your environment—no matter how regulated or complex—because your competitive edge depends on it.
 
-**Key Areas We Address**
+### Key Areas We Address
 
 - Payment Systems
   Speed up settlement times, reduce remittance costs, and mitigate fraud risk.
