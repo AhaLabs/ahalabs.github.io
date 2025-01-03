@@ -71,7 +71,7 @@ We get it: Large, regulated institutions have countless pressures—compliance, 
 
 ### Our Approach
 
-At AHA Labs, we specialize in **tailored blockchain solutions** for banks and financial institutions. We’re not just blockchain fans tinkering in a vacuum; we’ve worked alongside top-20 global banks, building systems that attack real-world bottlenecks head-on. We’ve also interviewed dozens of blockchain consultants at leading firms like KPMG and Accenture, so we know what works, what doesn’t, and most importantly, **why**.
+At Aha Labs, we specialize in **tailored blockchain solutions** for banks and financial institutions. We’re not just blockchain fans tinkering in a vacuum; we’ve worked alongside top-20 global banks, building systems that attack real-world bottlenecks head-on. We’ve also interviewed dozens of blockchain consultants at leading firms like KPMG and Accenture, so we know what works, what doesn’t, and most importantly, **why**.
 
 We won’t force a one-size-fits-all product into your world. Instead, we start by listening to your unique pain points. From there, we deliver a solution that fits seamlessly within your environment—no matter how regulated or complex—because your competitive edge depends on it.
 
