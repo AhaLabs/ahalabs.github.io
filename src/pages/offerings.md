@@ -86,23 +86,23 @@ We won’t force a one-size-fits-all product into your world. Instead, we start 
 ### Our Process
 
 1. Discovery & Roadmap
-- Collaborative Workshops: We begin by mapping your current systems, bottlenecks, and strategic goals.
-- Compliance & Risk Alignment: Our specialists work alongside your risk and compliance teams to ensure all regulatory requirements and data security standards are met from day one.
-- Solution Blueprint: We then craft a clear, step-by-step roadmap that highlights high-impact use cases, data flows, and integration points—bridging old and new seamlessly.
+   - Collaborative Workshops: We begin by mapping your current systems, bottlenecks, and strategic goals.
+   - Compliance & Risk Alignment: Our specialists work alongside your risk and compliance teams to ensure all regulatory requirements and data security standards are met from day one.
+   - Solution Blueprint: We then craft a clear, step-by-step roadmap that highlights high-impact use cases, data flows, and integration points—bridging old and new seamlessly.
 
 2. Proof of Concept (PoC)
-- Technical Validation: We build a lightweight PoC to confirm feasibility for your chosen focus; be it payment rails, asset tokenization, or otherwise.
-- Performance & Security: We subject the PoC to rigorous tests to ensure it meets banking standards for latency, throughput, fraud detection, and data protection.
-- Stakeholder Buy-In: Through demos, documentation, and training, we help you showcase blockchain’s potential and secure alignment with decision-makers.
+   - Technical Validation: We build a lightweight PoC to confirm feasibility for your chosen focus; be it payment rails, asset tokenization, or otherwise.
+   - Performance & Security: We subject the PoC to rigorous tests to ensure it meets banking standards for latency, throughput, fraud detection, and data protection.
+   - Stakeholder Buy-In: Through demos, documentation, and training, we help you showcase blockchain’s potential and secure alignment with decision-makers.
 
 3. Full-Scale Implementation
-- Custom Development: Our engineers develop production-grade smart contracts, APIs, and integration layers, tying seamlessly into existing systems like core banking and KYC/AML solutions.
-- Change Management: Introducing new tech involves more than just code. We coordinate closely with operations, compliance, and legal teams to make sure everyone’s on board.
-- Security & Compliance: Together with security experts, we conduct thorough audits so your new systems meet, or exceed, regulations like GDPR, FINRA, and other jurisdiction-specific standards.
+   - Custom Development: Our engineers develop production-grade smart contracts, APIs, and integration layers, tying seamlessly into existing systems like core banking and KYC/AML solutions.
+   - Change Management: Introducing new tech involves more than just code. We coordinate closely with operations, compliance, and legal teams to make sure everyone’s on board.
+   - Security & Compliance: Together with security experts, we conduct thorough audits so your new systems meet, or exceed, regulations like GDPR, FINRA, and other jurisdiction-specific standards.
 
 4. Ongoing Support & Optimization
-- Monitoring & Maintenance: Choose from tiered support packages post-launch, including 24/7 monitoring, SLA-based response times, and regular check-ups.
-- Upgrades & Feature Enhancements: As blockchain evolves, so should your infrastructure. We regularly review your solution and can implement new features—so you stay ahead of market opportunities.
+   - Monitoring & Maintenance: Choose from tiered support packages post-launch, including 24/7 monitoring, SLA-based response times, and regular check-ups.
+   - Upgrades & Feature Enhancements: As blockchain evolves, so should your infrastructure. We regularly review your solution and can implement new features—so you stay ahead of market opportunities.
 
 ### Ready to Take the Next Step?
 
