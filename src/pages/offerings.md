@@ -107,8 +107,8 @@ We won’t force a one-size-fits-all product into your world. Instead, we start 
 - Monitoring & Maintenance: Choose from tiered support packages post-launch, including 24/7 monitoring, SLA-based response times, and regular check-ups.
 - Upgrades & Feature Enhancements: As blockchain evolves, so should your infrastructure. We regularly review your solution and can implement new features—so you stay ahead of market opportunities.
 
-## Ready to Take the Next Step?
+### Ready to Take the Next Step?
 
-Email us at: <a href="mailto:hello@ahalabs.dev">hello@ahalabs.dev</a> 
+Get in touch: <a href="mailto:hello@ahalabs.dev">hello@ahalabs.dev</a> 
 
 Let’s discuss your unique needs and co-create a solution that delivers true transformation—not just another cookie-cutter implementation.
