@@ -77,14 +77,11 @@ We won’t force a one-size-fits-all product into your world. Instead, we start 
 
 ### Key Areas We Address
 
-- Payment Systems
-  Speed up settlement times, reduce remittance costs, and mitigate fraud risk.
+- **Payment Systems**: Speed up settlement times, reduce remittance costs, and mitigate fraud risk.
 
-- Asset Tokenization
-  Represent traditionally illiquid assets (like real estate) on-chain, creating new revenue opportunities and improving liquidity.
+- **Asset Tokenization**: Represent traditionally illiquid assets (like real estate) on-chain, creating new revenue opportunities and improving liquidity.
 
-- Stablecoins & CBDCs
-  Enter the digital currency space with confidence, benefiting from lower fees and near-instant settlement.
+- **Stablecoins & CBDCs**: Enter the digital currency space with confidence, benefiting from lower fees and near-instant settlement.
 
 **Our Process**
 
