@@ -108,4 +108,4 @@ We won’t force a one-size-fits-all product into your world. Instead, we start 
 
 Get in touch: <a href="mailto:hello@ahalabs.dev">hello@ahalabs.dev</a> 
 
-Let’s discuss your unique needs and co-create a solution that delivers true transformation—not just another cookie-cutter implementation.
+Let’s discuss your unique needs and co-create a solution that delivers true transformation.
