@@ -60,6 +60,11 @@ Meeting, to go over the report with you and answer any outstanding questions.
 Our DevX Audit is priced competitively, making it easy to justify as a low-level
 grant/engagement.
 
+### Ready to Take the Next Step?
+
+Get in touch: <a href="mailto:hello@ahalabs.dev">hello@ahalabs.dev</a>
+
+Let’s discuss your unique needs and co-create a solution that delivers true transformation.
 
 ## 2.Financial Institutions Custom Developments
 
@@ -106,6 +111,6 @@ We won’t force a one-size-fits-all product into your world. Instead, we start 
 
 ### Ready to Take the Next Step?
 
-Get in touch: <a href="mailto:hello@ahalabs.dev">hello@ahalabs.dev</a> 
+Get in touch: <a href="mailto:hello@ahalabs.dev">hello@ahalabs.dev</a>
 
 Let’s discuss your unique needs and co-create a solution that delivers true transformation.
