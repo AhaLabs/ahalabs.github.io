@@ -83,7 +83,7 @@ We won’t force a one-size-fits-all product into your world. Instead, we start 
 
 - **Stablecoins & CBDCs**: Enter the digital currency space with confidence, benefiting from lower fees and near-instant settlement.
 
-**Our Process**
+### Our Process
 
 1. Discovery & Roadmap
 - Collaborative Workshops: We begin by mapping your current systems, bottlenecks, and strategic goals.
