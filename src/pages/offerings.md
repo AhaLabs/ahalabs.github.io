@@ -62,11 +62,11 @@ grant/engagement.
 
 ### Ready to Take the Next Step?
 
-Get in touch: <a href="mailto:hello@ahalabs.dev">hello@ahalabs.dev</a>
+Get in touch: <a href="mailto:hello@ahalabs.dev?subject=DevX Audit">hello@ahalabs.dev</a>
 
 Let’s discuss your unique needs and co-create a solution that delivers true transformation.
 
-## 2.Financial Institutions Custom Developments
+## 2.Financial Institutions Custom Development
 
 Unlock next-generation financial services through blockchain.
 
@@ -111,6 +111,6 @@ We won’t force a one-size-fits-all product into your world. Instead, we start 
 
 ### Ready to Take the Next Step?
 
-Get in touch: <a href="mailto:hello@ahalabs.dev">hello@ahalabs.dev</a>
+Get in touch: <a href="mailto:hello@ahalabs.dev?subject=Financial Institution Custom Development">hello@ahalabs.dev</a>
 
 Let’s discuss your unique needs and co-create a solution that delivers true transformation.
