@@ -69,7 +69,7 @@ Your financial institution faces familiar yet daunting challenges: high remittan
 
 We get it: Large, regulated institutions have countless pressures—compliance, security, risk management, and legacy infrastructure to name a few. Introducing a new technology can feel like changing the engine mid-flight. But blockchain is at a tipping point. It’s not just hype; it’s a real, tangible tool that can reduce costs, open new revenue streams, and help you capture your slice of tomorrow’s financial ecosystem.
 
-**Our Approach**
+### Our Approach
 
 At AHA Labs, we specialize in **tailored blockchain solutions** for banks and financial institutions. We’re not just blockchain fans tinkering in a vacuum; we’ve worked alongside top-20 global banks, building systems that attack real-world bottlenecks head-on. We’ve also interviewed dozens of blockchain consultants at leading firms like KPMG and Accenture, so we know what works, what doesn’t, and most importantly, **why**.
 
