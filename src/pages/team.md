@@ -48,7 +48,11 @@ advanced blockchain solutions.
 
 ## Elizabeth Engelman, Senior Engineer
 
-TODO
+Elizabeth Engelman is a software engineer with over a decade of experience delivering software in a variety of domains including healthcare, insurance, finance, and politics. Before joining Aha Labs in 2023, she worked as a consultant, integrating into existing teams, leading initiatives, and developing greenfield applications to deliver immediate impact.
+
+At Aha Labs, Elizabeth focuses on advancing Stellar’s developer tools. She has experience with blockchain development, including Ethereum, Polygon, Stellar, and Flow, and is passionate about emerging technologies.
+
+Elizabeth holds a Master’s in Interactive Media Arts from NYU and has presented at conferences like Clojure/West and Software Craftsmanship North America.
 
 ## Pam Selle, Principal Engineer
 
