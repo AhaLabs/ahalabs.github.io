@@ -4,7 +4,7 @@ title: Offerings
 description: What Aha Labs can do for your software platform, blockchain project, or financial institution
 ---
 
-## 1. Developer Experience Audit
+## 1. Developer Experience (DevX) Audit
 
 Get your software platform ready for mass adoption.
 
