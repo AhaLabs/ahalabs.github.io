@@ -66,7 +66,7 @@ Get in touch: <a href="mailto:hello@ahalabs.dev?subject=DevX Audit">hello@ahalab
 
 Let’s discuss your unique needs and co-create a solution that delivers true transformation.
 
-## 2.Financial Institutions Custom Development
+## 2. Financial Institutions Custom Development
 
 Unlock next-generation financial services through blockchain.
 
