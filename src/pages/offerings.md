@@ -60,7 +60,21 @@ Meeting, to go over the report with you and answer any outstanding questions.
 Our DevX Audit is priced competitively, making it easy to justify as a low-level
 grant/engagement.
 
-### 🔖 Case Study: Starknet
+### 🔬 Case Study: Stellar
+
+[Stellar](https://stellar.org/) launched in 2014 with a focus on global remittance payments and without generic programming, aka "smart contract", capabilities. They started adding a new smart contract layer to their platform in 2022, with the goal of marketing it as a "batteries included" developer experience. The problem was, their internal team didn't have the time/expertise to install those batteries. At least not in the timeframe they needed. So they sent someone out, attending almost all the blockchain conferences of 2022, scouting. Did any team working on any blockchain have both the vision and the engineering chops to help them meet their ambitious deadline? They found one.
+
+At the time, Aha Labs had been focused on the NEAR ecosystem, building an [ancestor](https://raen.dev/admin/) to what became [Loam](https://loam.build). Stellar's representative attended NEARCON, where he saw a [talk](https://youtu.be/VenoNgWdvw0) by Aha Labs cofounder Chad O, and said "hey I want you to come do that on Stellar."
+
+We kicked things off with a DevX Audit, creating multiple documents for the Stellar team:
+
+1. [Soroban CLI Proposal](https://docs.google.com/document/d/16lJhyMU6cqRzNtMclr9yXd978MJgbZ0El9UhxbTz_Ts/edit?tab=t.0#heading=h.4tvfd2wht2ga): The name for Stellar's Smart Contract functionality was Soroban in 2022. We went through Soroban CLI's existing organization and behavior and suggested improvements. You can see a diff view at the end of the document showing a quick before-and-after, if all of our suggestions were to be implemented.
+2. [Extending Soroban CLI's `invoke` behavior](https://docs.google.com/document/d/1LASaLyxIA2-YqLnn2NqI5NZGnEmdzx9lLh-j7n0-i4A/edit?tab=t.0#heading=h.rr1xfyfdbyqw): This document helped us go deeper on specific design considerations for one of Stellar CLI's most powerful features.
+2. [Soroban Docs](https://docs.google.com/document/d/1qtMqTQZStR1Q9syaG-LgZKT_rcuEg0FLMIXhuAK1nYQ/edit?tab=t.0#heading=h.tuiqqltzs76h): We also did a deep analysis of the Soroban documentation that existed at the time, suggested how to reorganize it, and recommended new pages for topics not yet covered.
+
+The Stellar team loved our proposals and we have worked closely together since, shipping many of the recommendations from our original DevX Audit.
+
+### 🔬 Case Study: Starknet
 
 [Starknet](https://www.starknet.io/) is a Layer 2 network for Ethereum that harnesses Zero Knowledge proofs to enhance privacy and speed. Two of our engineers went through their onboarding documentation over the course of a week, creating three documents for them:
 
@@ -69,10 +83,6 @@ grant/engagement.
 3. [A Short Explanation of Loam](https://docs.google.com/document/d/1fHkrZeQMj_v4xzne8g4toKRa71Q-EKW_oR71_Cn1lPo/edit?tab=t.0#heading=h.pp9a87xx5ks8): the Starknet team specifically asked us to imagine what our [Loam](https://loam.build/) product might look like, if it were extended to work with Starknet
 
 After receiving our feedback, the team decided that Loam is not interesting to them at this time, but we hopped on a call to discuss our DevX Audit and determine next steps. Shortly after we got their team this feedback, they were [able to](https://github.com/starknet-io/starknet-docs/pull/1480) restructure their docs to incorporate some of our suggestions.
-
-### 🔖 Case Study: Stellar
-
-_pending_
 
 ### ✉️ Ready to Take the Next Step?
 
