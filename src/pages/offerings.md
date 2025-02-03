@@ -66,7 +66,7 @@ grant/engagement.
 
 1. [Analysis of the Core Onboarding Journey](https://docs.google.com/document/d/1z5_nkwNhxXitz6PYeUZu-avv6gGrWuDTXsL25luAh4I/edit?tab=t.0#heading=h.hmhw8fbeiiq5): high-level feedback about our onboarding experience as a whole
 2. [Suggestions for their CLI](https://docs.google.com/document/d/17OaiXeSVJH1bEJVVNx_ZiWmJZsbgF9vAdEMcHNZYIwM/edit?tab=t.0#heading=h.wf127bwxcmvq): given the central role that Command Line Interfaces play in a developer's workflow, we wanted to encourage Starknet to make a variety of both small and large improvements to the ergonomics of their CLI
-3. [A Short Explanation of Loam](https://docs.google.com/document/d/1fHkrZeQMj_v4xzne8g4toKRa71Q-EKW_oR71_Cn1lPo/edit?tab=t.0#heading=h.pp9a87xx5ks8): the Starknet team specifically asked us to imagine what our [Loam](https://loam.build/) offering might look like, if it were extended to work with Starknet
+3. [A Short Explanation of Loam](https://docs.google.com/document/d/1fHkrZeQMj_v4xzne8g4toKRa71Q-EKW_oR71_Cn1lPo/edit?tab=t.0#heading=h.pp9a87xx5ks8): the Starknet team specifically asked us to imagine what our [Loam](https://loam.build/) product might look like, if it were extended to work with Starknet
 
 After receiving our feedback, the team decided that Loam is not interesting to them at this time, but we hopped on a call to discuss our DevX Audit and determine next steps. Shortly after we got their team this feedback, they were [able to](https://github.com/starknet-io/starknet-docs/pull/1480) restructure their docs to incorporate some of our suggestions.
 
