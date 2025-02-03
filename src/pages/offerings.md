@@ -60,7 +60,21 @@ Meeting, to go over the report with you and answer any outstanding questions.
 Our DevX Audit is priced competitively, making it easy to justify as a low-level
 grant/engagement.
 
-### Ready to Take the Next Step?
+### 🔖 Case Study: Starknet
+
+[Starknet](https://www.starknet.io/) is a Layer 2 network for Ethereum that harnesses Zero Knowledge proofs to enhance privacy and speed. Two of our engineers went through their onboarding documentation over the course of a week, creating three documents for them:
+
+1. [Analysis of the Core Onboarding Journey](https://docs.google.com/document/d/1z5_nkwNhxXitz6PYeUZu-avv6gGrWuDTXsL25luAh4I/edit?tab=t.0#heading=h.hmhw8fbeiiq5): high-level feedback about our onboarding experience as a whole
+2. [Suggestions for their CLI](https://docs.google.com/document/d/17OaiXeSVJH1bEJVVNx_ZiWmJZsbgF9vAdEMcHNZYIwM/edit?tab=t.0#heading=h.wf127bwxcmvq): given the central role that Command Line Interfaces play in a developer's workflow, we wanted to encourage Starknet to make a variety of both small and large improvements to the ergonomics of their CLI
+3. [A Short Explanation of Loam](https://docs.google.com/document/d/1fHkrZeQMj_v4xzne8g4toKRa71Q-EKW_oR71_Cn1lPo/edit?tab=t.0#heading=h.pp9a87xx5ks8): the Starknet team specifically asked us to imagine what our [Loam](https://loam.build/) offering might look like, if it were extended to work with Starknet
+
+After receiving our feedback, the team decided that Loam is not interesting to them at this time, but we hopped on a call to discuss our DevX Audit and determine next steps. Shortly after we got their team this feedback, they were [able to](https://github.com/starknet-io/starknet-docs/pull/1480) restructure their docs to incorporate some of our suggestions.
+
+### 🔖 Case Study: Stellar
+
+_pending_
+
+### ✉️ Ready to Take the Next Step?
 
 Get in touch: <a href="mailto:hello@ahalabs.dev?subject=DevX Audit">hello@ahalabs.dev</a>
 
@@ -109,7 +123,7 @@ We won’t force a one-size-fits-all product into your world. Instead, we start 
    - Monitoring & Maintenance: Choose from tiered support packages post-launch, including 24/7 monitoring, SLA-based response times, and regular check-ups.
    - Upgrades & Feature Enhancements: As blockchain evolves, so should your infrastructure. We regularly review your solution and can implement new features—so you stay ahead of market opportunities.
 
-### Ready to Take the Next Step?
+### ✉️ Ready to Take the Next Step?
 
 Get in touch: <a href="mailto:hello@ahalabs.dev?subject=Financial Institution Custom Development">hello@ahalabs.dev</a>
 
