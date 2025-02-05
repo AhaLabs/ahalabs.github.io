@@ -1,0 +1,13 @@
+---
+import BlogPost from "../../layouts/BlogPost.astro";
+import { getEntry, render } from "astro:content";
+const devxAudit = await getEntry("offerings", "devx-audit");
+if (!devxAudit) {
+  throw new Error("could not find devx-audit offering page");
+}
+const { Content } = await render(devxAudit);
+---
+
+<BlogPost content={devxAudit.data}>
+  <Content />
+</BlogPost>

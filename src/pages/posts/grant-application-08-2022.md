@@ -2,6 +2,7 @@
 title: "Grant Application to NEAR Foundation"
 pubDate: "2022-08-08"
 author: "@chadoh"
+description: "We applied for a NEAR Foundation grant. Here are the interesting parts."
 ---
 
 We applied for a NEAR Foundation grant. Here are the interesting parts.
@@ -17,7 +18,7 @@ Please make sure to fill out all sections of the application. While you should p
 
 After completing your project’s pre-specified milestones, an individual or team can re-apply for another grant. Grants are issued in NEAR tokens but payment methods such as USD/ EUR can be issued in exceptional circumstances.
 
-NEAR Foundation offers different grant tracks of support depending on your current stage. A guide can be found here: 
+NEAR Foundation offers different grant tracks of support depending on your current stage. A guide can be found here:
 [https://bit.ly/Grant_Track_Guide_NF](https://bit.ly/Grant_Track_Guide_NF)
 
 You will receive a follow up email to confirm your application has been received and separately when the review process has started. If you have questions that aren’t answered on near.org/grants, please contact us via email at grants@near.foundation.
@@ -39,19 +40,19 @@ Infrastructure / Wallets
 # Please describe your project in 2-3 sentences.
 _Limit: 100 words._
 
-Create the best developer experience of any blockchain, with the most succinct and compelling path for Web2 developers. Continue to build out RAEN for NEAR, the "Ruby on Rails" for dapps, as well as related:  
-  - tools, e.g. NEAR Riffs, OpenZeppelin-like composable contract template library;  
-  - infrastructure: registry & bootloader contracts; governance DAOs;  
-  - integrations, e.g. nearblocks.io;  
-  - products: Contract Store, schema fallback DAO;  
-  - education: documentation, The RAEN Guide, Raenville, workshops, conference talks;  
+Create the best developer experience of any blockchain, with the most succinct and compelling path for Web2 developers. Continue to build out RAEN for NEAR, the "Ruby on Rails" for dapps, as well as related:
+  - tools, e.g. NEAR Riffs, OpenZeppelin-like composable contract template library;
+  - infrastructure: registry & bootloader contracts; governance DAOs;
+  - integrations, e.g. nearblocks.io;
+  - products: Contract Store, schema fallback DAO;
+  - education: documentation, The RAEN Guide, Raenville, workshops, conference talks;
   - marketing: Twitter, YouTube, GitHub, conference presence, blog.
 
-# LinkedIn URL 
+# LinkedIn URL
 
 [https://github.com/chadoh](https://github.com/chadoh), [https://linkedin.com/in/willem-wyndham](https://linkedin.com/in/willem-wyndham)
 
-# Twitter URL 
+# Twitter URL
 
 [https://twitter.com/raendev](https://twitter.com/raendev)
 
@@ -68,7 +69,7 @@ Team
 - [Jenni Dinsmore](https://github.com/JenniDins): A background in project management from the interior design world, made transition to software project mangement in late 2021.
 - [Anil Kumar](https://github.com/anilkumar1994): Started career working for a web2 finance reconciliation tech company; transitioned to web3 in late 2020. Specializes in backend JavaScript and Rust development.
 
-# Has your team previously received funding, tokens, or grants from NEAR? 
+# Has your team previously received funding, tokens, or grants from NEAR?
 
 Willem and Chad as Aha Labs were both NEAR Education Fellows; see [wrap-up](near-edu-fellowship-recap). The rest of our team as Pixel8 received a grant to build [NEAR Tooling](https://neartooling.com/).
 
@@ -111,7 +112,7 @@ A collective 8 years experience of 1. building tools that are both more powerful
 # What are your project milestones and estimated budget for each step (Please list)? And when are the expected delivery dates for each milestone?
 _Guidelines for completing milestones: [https://bit.ly/Grant-Milestone-Guide-NF](https://bit.ly/Grant-Milestone-Guide-NF)_
 
-### Milestone 1: NEAR Contract Store soft launch  
+### Milestone 1: NEAR Contract Store soft launch
 _(Month 1, $70k)_
 
   - NEAR Riffs v1 released with usable documentation & good branding
@@ -119,7 +120,7 @@ _(Month 1, $70k)_
   - DAO to manage submissions of new contracts to Store
   - Subgraph-driven dashboard tracking launched contracts
 
-### Milestone 2: RAEN refinements  
+### Milestone 2: RAEN refinements
 _(Month 2, $35k)_
 
   - Branding (outsourced)
@@ -129,7 +130,7 @@ _(Month 2, $35k)_
   - Rust SDK `allow` macro (supersede `/// @allow` comments)
   - RAEN Admin: Sign into multiple contracts at once (work around near-api-js limitation)
 
-### Milestone 3: Ecosystem development  
+### Milestone 3: Ecosystem development
 _(Month 2, $35k)_
 
   - NEAR Tooling: Add Linkdrop indexing
@@ -139,14 +140,14 @@ _(Month 2, $35k)_
     Skellies, NFT TAYC, ...)
   - Measuring success: Index all deployed contracts; check if built with RAEN
 
-### Milestone 4: Verified secondary RAEN schema fallback system  
+### Milestone 4: Verified secondary RAEN schema fallback system
 _(Month 3, $70k)_
 
   - DAO to manage submissions of fallback RAEN schemas
   - Web app to wrap DAO and allow easy browsing of schemas
   - Collaborate with Jacob Lindahl's contract [registry](https://github.com/NEAR-Edu/contract-registry)
 
-### Milestone 5: Wit-to-X generators, where X equals:  
+### Milestone 5: Wit-to-X generators, where X equals:
 _(Month 4, $70k)_
 
   - Interactive contract CLI
@@ -158,14 +159,14 @@ _(Month 4, $70k)_
   - Pagoda's [upcoming ABI](https://github.com/near/near-sdk-rs/blob/41eb838b0d745394d7530aabe363f80dfc649a0c/near-sdk/src/private)
   - Subgraphs
 
-### Milestone 6: OpenZeppelin-like contract composition  
+### Milestone 6: OpenZeppelin-like contract composition
 _(Month 5, $70k)_
 
   - `raen generate contract (nft|ft|dao|etc)` to fetch same template contracts used by Contract Store
   - `raen generate scaffold` to also generate associated Subgraph & TypeScript
   - `raen use [some-contract.testnet|some-contract.near]` to generate Subgraph & TypeScript from deployed contract
 
-### Milestone 7: Education & tutorials  
+### Milestone 7: Education & tutorials
 _(Month 6, $70k)_
   - Expand [The Guide](https://raen.dev/guide)
       - Use launcher to allow users to deploy contracts from guide
@@ -211,7 +212,7 @@ In order of importance:
 - Video views
 - Twitter followers
 
-# Links to Video(s) 
+# Links to Video(s)
 _Please upload any videos to some video hosting platform (e.g. YouTube/Vimeo/etc.) and add the link(s) below:_
 
 ### [Introducing RAEN](https://youtu.be/m5dOyaKp18Y) (2min)
@@ -237,17 +238,17 @@ Acceptable file types: .csv, .doc, .docx, .odt, .pdf, .rtf, .txt, .wpd, .wpf, .g
   <iframe src="https://raen.dev/vision-talk/ahalabs-pitch.pdf" title="Aha Labs Pitch" frameborder="0"></iframe>
 </div>
 
-# Are you currently raising a round (or do you have plans to do so in the future)? 
+# Are you currently raising a round (or do you have plans to do so in the future)?
 _If yes, please tick the box below._
 
 No
 
-# How did you hear about the NEAR Grants Program? 
+# How did you hear about the NEAR Grants Program?
 _Please tell us how you found this program!
 Did you hack with us, see us in a newsletter, or something else?_
 
 We all worked with NEAR previously
 
-# Did someone refer you to the NF Grants Program? 
+# Did someone refer you to the NF Grants Program?
 
 Sherif Abushadi, Cameron Dennis, Matt Lockyer, Dani Osorio, and others. See everyone who signed our recommendations contract here: [rec.raen.dev/list](https://rec.raen.dev/list)

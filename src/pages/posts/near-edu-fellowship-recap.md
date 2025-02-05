@@ -2,6 +2,7 @@
 title: "Our time as NEAR Education Fellows: Reflections, Retrospective, Accomplishments, What's Next"
 pubDate: "2022-07-11"
 author: "@raendev"
+description: "Aha Labs joined the NEAR Education Fellowship program in January 2022. Reflections, retrospective, and what's next."
 ---
 
 Aha Labs joined the NEAR Education Fellowship program in January 2022. This program has changed structure; our time with it ended in May. Some highlights:

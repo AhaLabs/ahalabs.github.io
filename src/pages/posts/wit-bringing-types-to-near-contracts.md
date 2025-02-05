@@ -2,6 +2,7 @@
 title: "WIT: Bringing types to NEAR smart contracts"
 pubDate: "2022-03-25"
 author: "@willemneal"
+description: "Aha Labs has been working on a tool to bring types to NEAR smart contracts. This post explains the tool and its benefits."
 ---
 
 # NEAR and WebAssembly

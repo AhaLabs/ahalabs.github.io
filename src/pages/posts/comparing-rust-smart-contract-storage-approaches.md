@@ -2,6 +2,7 @@
 title: "Comparing Rust Smart Contract Storage Approaches"
 pubDate: "2022-11-30"
 author: "@chadoh"
+description: "A comparison of how NEAR, Soroban, and CosmWasm each wrap the key-value store in their Rust smart contracts."
 ---
 
 I  ([@chadoh](https://twitter.com/chadoh)) recently started [exploring the CosmWasm smart contract module for Cosmos](https://github.com/Web3-Builders-Alliance/ClusterOneCodeJournal.W22MTW.Chad/blob/main/standards.md) as well as [Soroban, a new smart contract platform from the Stellar team](https://github.com/stellar/sorobanathon/discussions/19).
@@ -211,7 +212,7 @@ use serde::{Deserialize, Serialize};
 use thiserror::Error;
 ```
 
-Something interesting is just the number of dependencies. 
+Something interesting is just the number of dependencies.
 
 1. `cosmwasm_schema`
 2. `cosmwasm_std`

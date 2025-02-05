@@ -2,6 +2,7 @@
 title: "Grant Application to The Graph"
 pubDate: "2022-09-29"
 author: "@chadoh"
+description: "We applied for a grant from The Graph. Here's the proposal."
 ---
 
 We applied for a grant from [The Graph](https://thegraph.com/en/). Here are the interesting parts.
@@ -53,7 +54,7 @@ _This is the place to share where you've contributed (ie. Github), examples of y
 https://github.com/raendev
 
 # Anything else you'd like to share?
- 
+
 This proposal was made at the urging and with the guidance of Simon Emanuel, who I ([@chadoh]) spoke with at NEARCON and again in a follow-up call. Quote from Simon: “Given the skills and experience of this team, I have the impression that they could become a long term contributor to The Graph by creating best-in-class tooling for NEAR dapp developers”.
 
 Future Work: We anticipate many improvements and additional features to this starting tooling. For example, we would love a 'raen watch' command that automatically updates relevant parts of Subgraphs as contracts change, especially for local full-stack development. We will apply for a follow-up grant to fund such continued development.
