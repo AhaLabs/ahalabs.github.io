@@ -74,7 +74,7 @@ The Stellar team loved our proposals and we have worked closely together since, 
 
 ## Case Study: Starknet
 
-[Starknet](https://www.starknet.io/) is a Layer 2 network for Ethereum that harnesses Zero Knowledge proofs to enhance privacy and speed. Two of our engineers went through their onboarding documentation over the course of a week, creating three documents for them:
+[Starknet](https://www.starknet.io/) is a Layer 2 network for Ethereum that harnesses Zero Knowledge proofs to enhance privacy and speed. Two of our engineers went through their onboarding documentation over the course of a week and found that, even for experienced engineers, it took multiple working days to create functional code. This is a non-starter, for hackathon participants and curious dabblers! We created three documents for them, to help them get this down to a 30-60min onboarding journey:
 
 1. [Analysis of the Core Onboarding Journey](https://docs.google.com/document/d/1z5_nkwNhxXitz6PYeUZu-avv6gGrWuDTXsL25luAh4I/edit?tab=t.0#heading=h.hmhw8fbeiiq5): high-level feedback about our onboarding experience as a whole
 2. [Suggestions for their CLI](https://docs.google.com/document/d/17OaiXeSVJH1bEJVVNx_ZiWmJZsbgF9vAdEMcHNZYIwM/edit?tab=t.0#heading=h.wf127bwxcmvq): given the central role that Command Line Interfaces play in a developer's workflow, we wanted to encourage Starknet to make a variety of both small and large improvements to the ergonomics of their CLI
