@@ -28,9 +28,21 @@ Our DevX Audit is priced competitively, making it easy to justify as a low-level
 
 ## Case Study: Stellar
 
+After collaborating with Aha Labs, Stellar ended [years of slow attrition](https://www.developerreport.com/ecosystems/stellar)...
+
+![Stellar total monthly active developers since inception in 2015. The graph shows a big spike in 2018, then a lot of noise with a slow downward trend until mid-2023. The moment when Aha Labs started collaborating with Stellar Development Foundation is shown near the end of 2022.](stellar-lifetime-growth.png)
+
+...to become [one of the 10 fastest-growing ecosystems](https://www.developerreport.com/developer-report).
+
+![A slide from the 2024 Developer Report by Electric Capital, showing the top-10 fastest-growing ecosystems of year, with Stellar coming in at number 9 when measuring by overall developers.](2024-stellar-top-10-grower.png)
+
+### Full Story
+
 [Stellar](https://stellar.org/) launched in 2014 with a focus on global remittance payments and without generic programming, aka "smart contract", capabilities. They started adding a new smart contract layer to their platform in 2022, with the goal of marketing it as a "batteries included" developer experience. The problem was, their internal team didn't have the time/expertise to install those batteries. At least not in the timeframe they needed. So they sent someone out, attending almost all the blockchain conferences of 2022, scouting. Did any team working on any blockchain have both the vision and the engineering chops to help them meet their ambitious deadline? They found one.
 
 At the time, Aha Labs had been focused on the NEAR ecosystem, building an [ancestor](https://raen.dev/admin/) to what became [Loam](https://loam.build). Stellar's representative attended NEARCON, where he saw a [talk](https://youtu.be/VenoNgWdvw0) by Aha Labs cofounder Chad O, and said "hey I want you to come do that on Stellar."
+
+### Specific Deliverables
 
 We kicked things off with a DevX Audit, creating multiple documents for the Stellar team:
 
