@@ -10,12 +10,6 @@ const posts = (await Astro.glob("./posts/*.{md,mdx}")).sort(
 
 <BaseLayout wrapClass="container">
   <p>
-    Makers of
-    <a href="https://loam.build" target="_blank" rel="noopener noreferrer"
-      >Loam</a
-    >.
-  </p>
-  <p>
     We are a team of Stellar core contributors (we maintain the
     <a
       href="https://github.com/stellar/soroban-cli"
@@ -49,26 +43,6 @@ const posts = (await Astro.glob("./posts/*.{md,mdx}")).sort(
       >team@ahalabs.dev</a
     >
   </p>
-  {
-    posts.length > 0 && (
-      <section class="posts">
-        <h1>Recent posts</h1>
-        {posts.map((post) => (
-          <p>
-            <a href={post.url}>{post.frontmatter.title}</a>
-            <br />
-            <time datetime={post.frontmatter.pubDate}>
-              {new Date(post.frontmatter.pubDate).toLocaleDateString("en-us", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </time>
-          </p>
-        ))}
-      </section>
-    )
-  }
 </BaseLayout>
 <style>
   .posts p {
