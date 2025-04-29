@@ -4,10 +4,10 @@ Site built with [Astro](https://astro.build).
 
 # Contributing
 
-Prereq: install NodeJS and [yarn](https://yarnpkg.com). Then:
+Prereq: install NodeJS. Then:
 
 - Clone repo
-- `yarn install`
-- `yarn dev` and edit files to see your changes
-- `yarn build` and open `docs/index.html` to see if the built version looks correct
-- `git push` to the `main` branch to deploy an updated website
+- `npm install`
+- `npm run dev` and edit files to see your changes
+- `npm run build` and open `docs/index.html` to see if the built version looks correct
+-  Updates `main` branch deploy an updated website
